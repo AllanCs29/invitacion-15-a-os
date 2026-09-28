@@ -102,7 +102,7 @@
     }
     @keyframes pulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
 
-    /* RÁFAGA DE MARIPOSAS */
+    /* RÁFAGA DE MARIPOSAS AL ABRIR */
     .butterfly-fly {
       position: fixed; font-size: 28px; pointer-events: none; z-index: 2000; opacity: 0;
       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); animation: flyOut 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
@@ -112,7 +112,7 @@
       100% { transform: translate(var(--x), var(--y)) scale(1.4) rotate(var(--rot)); opacity: 0; }
     }
 
-    /* ENREDADERAS Y MARIPOSAS FIJAS */
+    /* ENREDADERAS Y 15 MARIPOSAS FIJAS */
     .vines-container {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       pointer-events: none; z-index: 5; opacity: 0; transition: opacity 2s ease 1.2s; 
@@ -136,7 +136,6 @@
     .fly-container { position: absolute; width: 45px; height: 45px; z-index: 6; pointer-events: none; }
     .svg-butterfly { width: 100%; height: 100%; filter: drop-shadow(0 0 10px var(--neon-blue)); animation: flapWings 0.45s infinite alternate ease-in-out; transform-origin: center; }
     
-    /* 15 MARIPOSAS DISTRIBUIDAS */
     .fly-1 { top: 15%; left: 8%; animation: floatPath1 12s infinite ease-in-out; }
     .fly-2 { top: 25%; right: 10%; animation: floatPath2 14s infinite ease-in-out reverse; }
     .fly-3 { bottom: 12%; left: 15%; animation: floatPath3 11s infinite ease-in-out; }
@@ -158,7 +157,7 @@
     @keyframes floatPath2 { 0% { transform: translate(0, 0) rotate(-20deg); } 33% { transform: translate(-80px, -40px) rotate(-40deg); } 66% { transform: translate(-30px, 90px) rotate(15deg); } 100% { transform: translate(0, 0) rotate(-20deg); } }
     @keyframes floatPath3 { 0% { transform: translate(0, 0) rotate(5deg); } 33% { transform: translate(70px, -60px) rotate(30deg); } 66% { transform: translate(30px, -100px) rotate(-20deg); } 100% { transform: translate(0, 0) rotate(5deg); } }
 
-    /* CONTENIDO PRINCIPAL */
+    /* CONTENIDO PRINCIPAL Y NUEVAS SECCIONES */
     .invitation-card {
       width: 100%; background: var(--card-bg); border-radius: 20px; padding: 30px 20px;
       border: 1px solid var(--border-color); backdrop-filter: blur(10px);
@@ -169,47 +168,39 @@
     .header-subtitle { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 4px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 5px; }
     .main-title { font-family: 'Great Vibes', cursive; font-size: 3.2rem; background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink), var(--butterfly-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
     
-    /* ==========================================
-       MARCO CON CORONA (OPTIMIZADO PARA PNG)
-       ========================================== */
-    .photo-frame-container {
-      position: relative;
-      width: 250px; 
-      height: 250px; 
-      margin: 20px auto; 
-      flex-shrink: 0; 
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .the-frame {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      z-index: 2;
-      /* Eliminado mix-blend-mode porque el PNG ya es transparente */
-      pointer-events: none;
-    }
-    .the-photo {
-      position: absolute;
-      width: 53%; 
-      height: 60%; 
-      top: 24%;
-      left: 23.5%;
-      object-fit: cover;
-      border-radius: 50%;
-      z-index: 1;
-      box-shadow: 0 0 15px rgba(0,0,0,0.8);
-    }
+    /* MARCO CON CORONA */
+    .photo-frame-container { position: relative; width: 250px; height: 250px; margin: 20px auto; flex-shrink: 0; display: flex; justify-content: center; align-items: center; }
+    .the-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 2; pointer-events: none; }
+    .the-photo { position: absolute; width: 53%; height: 60%; top: 24%; left: 23.5%; object-fit: cover; border-radius: 50%; z-index: 1; box-shadow: 0 0 15px rgba(0,0,0,0.8); }
 
     .invitation-text { font-size: 0.95rem; line-height: 1.6; color: var(--text-main); font-weight: 300; padding: 0 10px; }
     .data-section { display: flex; flex-direction: column; gap: 15px; }
     .info-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 18px; border-radius: 15px; text-align: center; }
     .info-card h3 { font-family: 'Cinzel', serif; color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 5px; }
     .info-card p { font-size: 0.85rem; color: var(--text-main); margin-bottom: 12px; }
+
+    /* CUENTA REGRESIVA */
+    .countdown-container { display: flex; justify-content: center; gap: 10px; margin: 10px 0; }
+    .time-box { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; width: 65px; text-align: center; }
+    .time-box span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--butterfly-gold); text-shadow: 0 0 10px rgba(255, 224, 102, 0.5); }
+    .time-box p { font-size: 0.65rem; color: var(--text-main); margin-top: 5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;}
+
+    /* ITINERARIO (TIMELINE) */
+    .timeline { position: relative; max-width: 300px; margin: 15px auto; padding-left: 20px; border-left: 2px solid var(--butterfly-pink); text-align: left; }
+    .timeline-item { position: relative; margin-bottom: 20px; padding-left: 15px; }
+    .timeline-item::before { content: ''; position: absolute; left: -27px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--butterfly-gold); border: 2px solid var(--bg-base); box-shadow: 0 0 8px var(--butterfly-gold); }
+    .time-label { font-weight: bold; color: var(--butterfly-blue); font-size: 0.95rem; }
+    .event-desc { font-size: 0.85rem; color: var(--text-main); margin-top: 3px; font-weight: 300;}
+
+    /* SUGERENCIA DE REGALOS (ESTILOS NUEVOS) */
+    .gift-list { display: flex; flex-direction: column; gap: 12px; text-align: left; margin: 15px auto; width: fit-content; }
+    .gift-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text-main); font-weight: 400;}
+    .gift-icon { display: flex; justify-content: center; align-items: center; width: 35px; height: 35px; background: rgba(255,255,255,0.05); border-radius: 50%; border: 1px solid var(--border-color); }
+
+    /* INSTAGRAM Y QR */
+    .ig-section { background: rgba(0,0,0,0.2); border-radius: 15px; padding: 25px 20px; text-align: center; border: 1px dashed var(--butterfly-pink); margin-top: 10px;}
+    .qr-code { width: 130px; height: 130px; margin: 15px auto; border-radius: 10px; padding: 8px; background: white; display: block;}
+    .btn-ig { display: inline-block; padding: 10px 20px; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; border-radius: 25px; text-decoration: none; font-size: 0.8rem; font-weight: bold; margin-top: 10px; box-shadow: 0 0 15px rgba(204, 35, 102, 0.4); transition: transform 0.3s ease;}
 
     /* BOTONES */
     .btn-view-info, .btn-rsvp-main {
@@ -219,7 +210,7 @@
     }
     .btn-rsvp-main { background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink)); color: #12091f; border: none; font-weight: 700; margin-top: 10px; box-shadow: 0 0 15px rgba(255, 153, 204, 0.5); }
 
-    /* OVERLAYS (MAPA Y RSVP) */
+    /* OVERLAYS (MAPA, RSVP, BANCO) */
     .overlay-window {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.85); z-index: 2000; display: flex;
@@ -227,24 +218,14 @@
       transition: opacity 0.5s ease; backdrop-filter: blur(5px);
     }
     .overlay-window.active { opacity: 1; visibility: visible; }
-    .overlay-container {
-      width: 90%; max-width: 400px; background: var(--card-bg); border: 1px solid var(--border-color);
-      border-radius: 20px; padding: 20px; position: relative; box-shadow: 0 0 30px var(--shadow-color);
-    }
+    .overlay-container { width: 90%; max-width: 400px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; position: relative; box-shadow: 0 0 30px var(--shadow-color); }
     .btn-close-overlay { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
     .map-iframe { width: 100%; height: 250px; border-radius: 12px; border: none; margin-top: 25px; margin-bottom: 15px; }
     
-    /* FORMULARIO RSVP */
     .rsvp-form { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
-    .rsvp-input {
-      width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-color);
-      background: rgba(255, 255, 255, 0.05); color: #fff; font-family: 'Montserrat', sans-serif; outline: none;
-    }
+    .rsvp-input { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.05); color: #fff; font-family: 'Montserrat', sans-serif; outline: none; }
     .rsvp-input::placeholder { color: rgba(255, 255, 255, 0.5); }
-    .btn-submit-rsvp {
-      padding: 12px; background: linear-gradient(135deg, var(--butterfly-gold), var(--butterfly-pink));
-      color: #12091f; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; letter-spacing: 1px;
-    }
+    .btn-submit-rsvp { padding: 12px; background: linear-gradient(135deg, var(--butterfly-gold), var(--butterfly-pink)); color: #12091f; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; letter-spacing: 1px; }
 
     /* BOTÓN DE MÚSICA */
     .music-btn {
@@ -324,6 +305,29 @@
     </div>
   </div>
 
+  <!-- OVERLAY DE DATOS BANCARIOS (NUEVO) -->
+  <div class="overlay-window" id="bankOverlay">
+    <div class="overlay-container">
+      <button class="btn-close-overlay" onclick="closeBank()">✕</button>
+      <h3 style="font-family: 'Cinzel', serif; color: var(--butterfly-pink); text-align: center;">Datos Bancarios</h3>
+      <p style="font-size: 0.8rem; text-align: center; margin-top: 5px; color: var(--text-main);">Agradezco de corazón tu detalle.</p>
+      
+      <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: left;">
+        <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BANCO:</strong></p>
+        <!-- REEMPLAZA EL NOMBRE DEL BANCO A CONTINUACIÓN -->
+        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE DEL BANCO]</p>
+        
+        <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BENEFICIARIO:</strong></p>
+        <!-- REEMPLAZA EL NOMBRE DEL BENEFICIARIO A CONTINUACIÓN -->
+        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE COMPLETO DEL BENEFICIARIO]</p>
+        
+        <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>CUENTA CLABE:</strong></p>
+        <!-- REEMPLAZA LOS NÚMEROS DE LA CLABE A CONTINUACIÓN -->
+        <p style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;">000 000 0000000000 0</p>
+      </div>
+    </div>
+  </div>
+
   <!-- CONTENIDO DE LA INVITACIÓN -->
   <div class="mobile-container">
     <div class="invitation-card">
@@ -334,9 +338,7 @@
         <h1 class="main-title">Shelani Esmeralda</h1>
         <p class="header-subtitle">Camacho Casaos</p>
         
-        <!-- CONTENEDOR CON LA FOTO Y EL MARCO DE CORONA -->
         <div class="photo-frame-container">
-          <!-- AHORA USANDO EXTENSIÓN .PNG PARA EL MARCO TRANSPARENTE -->
           <img class="the-photo" src="foto_shelani.jpeg" alt="Shelani Esmeralda">
           <img class="the-frame" src="image_ffdf38.png" alt="Marco de corona">
         </div>
@@ -346,6 +348,27 @@
         Con la bendición de Dios y el amor de mi familia, celebro la alegría de cumplir XV años. ¡Tu presencia hará este día aún más especial!
       </p>
 
+      <!-- CUENTA REGRESIVA -->
+      <div class="countdown-container">
+        <div class="time-box">
+          <span id="cd-days">00</span>
+          <p>Días</p>
+        </div>
+        <div class="time-box">
+          <span id="cd-hours">00</span>
+          <p>Horas</p>
+        </div>
+        <div class="time-box">
+          <span id="cd-mins">00</span>
+          <p>Minutos</p>
+        </div>
+        <div class="time-box">
+          <span id="cd-secs">00</span>
+          <p>Segundos</p>
+        </div>
+      </div>
+
+      <!-- SECCIÓN MAPAS -->
       <div class="data-section">
         <div class="info-card">
           <h3>Ceremonia Religiosa</h3>
@@ -355,11 +378,78 @@
 
         <div class="info-card">
           <h3>Recepción / Jardín</h3>
-          <p>Sábado 5 Diciembre 2026<br>Hora: 8:00 PM</p>
+          <p>Sábado 5 Diciembre 2026<br>Hora: 7:00 PM</p>
           <button class="btn-view-info" onclick="showMap('jardin')">🎉 VER INFO DEL JARDÍN</button>
         </div>
       </div>
+
+      <!-- ITINERARIO / TIMELINE -->
+      <div class="info-card" style="margin-top: 5px;">
+        <h3>Itinerario</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="time-label">6:00 PM - 7:00 PM</div>
+            <div class="event-desc">Ceremonia Religiosa (Misa)</div>
+          </div>
+          <div class="timeline-item">
+            <div class="time-label">7:00 PM</div>
+            <div class="event-desc">Recepción de Invitados</div>
+          </div>
+          <div class="timeline-item">
+            <div class="time-label">8:00 PM - 9:00 PM</div>
+            <div class="event-desc">Cena amenizada con Mariachi</div>
+          </div>
+          <div class="timeline-item">
+            <div class="time-label">9:30 PM</div>
+            <div class="event-desc">Vals y Brindis</div>
+          </div>
+        </div>
+      </div>
       
+      <!-- SUGERENCIA DE REGALOS (NUEVO APARTADO) -->
+      <div class="info-card" style="margin-top: 5px;">
+        <h3 style="color: var(--butterfly-pink);">Sugerencia de Regalo</h3>
+        <p style="margin-top: 8px; font-weight: 300;">El mejor regalo es tu presencia, pero si deseas tener un detalle conmigo, aquí te dejo algunas opciones:</p>
+        
+        <div class="gift-list">
+          <div class="gift-item">
+            <div class="gift-icon">
+              <!-- Icono profesional SVG: Pantalones -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--butterfly-gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22L4 10C4 8.89543 4.89543 8 6 8H18C19.1046 8 20 8.89543 20 10V22M4 22H7M4 22L4 22M20 22H17M20 22L20 22M7 22H17M7 22V8M17 22V8M10 4C10 2.89543 10.8954 2 12 2C13.1046 2 14 2.89543 14 4V8H10V4Z"/></svg>
+            </div>
+            Pantalones: Talla 28
+          </div>
+          <div class="gift-item">
+            <div class="gift-icon">
+              <!-- Icono profesional SVG: Blusa -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--butterfly-pink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>
+            </div>
+            Blusa: Talla Chica
+          </div>
+          <div class="gift-item">
+            <div class="gift-icon">
+              <!-- Icono profesional SVG: Tenis -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--neon-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17H2c-.5 0-1-.5-1-1v-2c0-2.8 2.2-5 5-5h2l.8-2.6A2 2 0 0 1 10.7 5h2.6a2 2 0 0 1 1.9 1.4L16 9h2c2.8 0 5 2.2 5 5v2c0 .5-.5 1-1 1z"></path><path d="M6 13h5"></path><path d="M12 13h5"></path></svg>
+            </div>
+            Calzado (Tenis): #2
+          </div>
+        </div>
+
+        <p style="margin-top: 15px; margin-bottom: 15px; font-weight: 500; color: var(--text-main);">Por si no encuentras el regalo indicado existe la siguiente opcion :D    :</p>
+        <button class="btn-view-info" onclick="openBank()">💳 DATOS PARA TRANSFERENCIA</button>
+      </div>
+
+      <!-- SECCIÓN INSTAGRAM Y CÓDIGO QR -->
+      <div class="ig-section">
+        <h3 style="font-family: 'Cinzel', serif; color: var(--butterfly-pink); font-size: 1.1rem;">¡Captura los momentos!</h3>
+        <p style="font-size: 0.8rem; color: var(--text-main); margin-top: 8px;">Etiquétame en tus fotos y videos en mi <br><strong style="color: var(--butterfly-gold);">INSTAGRAM</strong></p>
+        
+        <img id="qrImage" class="qr-code" src="" alt="Código QR de Instagram">
+        
+        <a href="#" id="igLink" target="_blank" class="btn-ig">📸 SÍGUEME EN INSTAGRAM</a>
+      </div>
+      
+      <!-- CONFIRMACIÓN DE ASISTENCIA -->
       <button class="btn-rsvp-main" onclick="openRSVP()">💌 CONFIRMAR ASISTENCIA</button>
 
       <p style="font-family: 'Great Vibes', cursive; font-size: 1.8rem; color: var(--butterfly-gold); margin-top: 10px;">
@@ -369,6 +459,30 @@
   </div>
 
   <script>
+    /// ========================================== ///
+    /// PON AQUÍ EL ENLACE DEL INSTAGRAM DE ELLA   ///
+    /// ========================================== ///
+    const ENLACE_INSTAGRAM = "https://www.instagram.com/shelyssmin?utm_source=qr&stkn=cGZraXhwamFudTM4"; 
+
+    // Configuración Automática de Instagram y QR
+    document.getElementById('igLink').href = ENLACE_INSTAGRAM;
+    document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ENLACE_INSTAGRAM)}`;
+
+    // Lógica de Cuenta Regresiva (Apunta al 5 Dic 2026 - 6:00 PM)
+    const fechaEvento = new Date("December 5, 2026 18:00:00").getTime();
+    
+    setInterval(function() {
+      const ahora = new Date().getTime();
+      const distancia = fechaEvento - ahora;
+
+      if (distancia >= 0) {
+        document.getElementById("cd-days").innerText = Math.floor(distancia / (1000 * 60 * 60 * 24));
+        document.getElementById("cd-hours").innerText = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("cd-mins").innerText = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("cd-secs").innerText = Math.floor((distancia % (1000 * 60)) / 1000);
+      }
+    }, 1000);
+
     const mapData = {
       iglesia: { title: 'Ceremonia Religiosa', theme: 'theme-iglesia', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.022697833984!2d-98.95411362451898!3d19.368169842734886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e26bd05a6d25%3A0xa8502f7f9816d759!2sParroquia%20de%20Santa%20Mar%C3%ADa%20Magdalena%20de%20Atlicpac!5e0!3m2!1ses-419!2smx!4v1790624027111!5m2!1ses-419!2smx', externalUrl: 'https://share.google/gkqFt4Y1guB9mTgLx' },
       jardin: { title: 'Recepción y Fiesta', theme: 'theme-jardin', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.8869055250884!2d-98.94101392451881!3d19.374049042547664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e3eef972155d%3A0x41e0b637c050f1ee!2sEl%20Encanto%2C%20Jard%C3%ADn%20de%20Eventos!5e0!3m2!1ses-419!2smx!4v1790623866884!5m2!1ses-419!2smx', externalUrl: 'https://maps.app.goo.gl/BBn9hua3kwDdVXr7A' }
@@ -399,6 +513,7 @@
       setTimeout(() => { butterfly.remove(); }, 3000);
     }
 
+    /* CONTROL DE OVERLAYS */
     function showMap(type) {
       const data = mapData[type];
       document.body.className = data.theme;
@@ -407,7 +522,6 @@
       document.getElementById('mapExternalLink').href = data.externalUrl;
       document.getElementById('mapOverlay').classList.add('active');
     }
-    
     function closeMap() {
       document.getElementById('mapOverlay').classList.remove('active');
       document.getElementById('mapIframe').src = "";
@@ -417,6 +531,10 @@
     function openRSVP() { document.getElementById('rsvpOverlay').classList.add('active'); }
     function closeRSVP() { document.getElementById('rsvpOverlay').classList.remove('active'); }
     
+    // Controles Modal Bancario
+    function openBank() { document.getElementById('bankOverlay').classList.add('active'); }
+    function closeBank() { document.getElementById('bankOverlay').classList.remove('active'); }
+
     function submitRSVP(e) {
       e.preventDefault();
       const name = document.getElementById('guestName').value;
@@ -432,6 +550,20 @@
       if (music.paused) { music.play(); btn.innerHTML = "🎵"; } 
       else { music.pause(); btn.innerHTML = "🔇"; }
     }
+
+    // Detener la música si se minimiza la pestaña o se bloquea el celular
+    document.addEventListener("visibilitychange", function() {
+      const music = document.getElementById('bg-music');
+      const btn = document.getElementById('musicToggle');
+      if (document.hidden) {
+        music.pause();
+      } else {
+        if (isOpened && btn.innerHTML === "🎵") {
+          music.play().catch(e => console.log("Audio prevenido"));
+        }
+      }
+    });
+
   </script>
 </body>
 </html>
