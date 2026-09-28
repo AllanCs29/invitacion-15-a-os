@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mis XV Años - Shelani Esmeralda</title>
+  <title>Mis 15 Años - Shelani Esmeralda</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,10 +135,24 @@
     
     .fly-container { position: absolute; width: 45px; height: 45px; z-index: 6; pointer-events: none; }
     .svg-butterfly { width: 100%; height: 100%; filter: drop-shadow(0 0 10px var(--neon-blue)); animation: flapWings 0.45s infinite alternate ease-in-out; transform-origin: center; }
+    
+    /* 15 MARIPOSAS DISTRIBUIDAS */
     .fly-1 { top: 15%; left: 8%; animation: floatPath1 12s infinite ease-in-out; }
     .fly-2 { top: 25%; right: 10%; animation: floatPath2 14s infinite ease-in-out reverse; }
     .fly-3 { bottom: 12%; left: 15%; animation: floatPath3 11s infinite ease-in-out; }
     .fly-4 { bottom: 20%; right: 8%; animation: floatPath1 13s infinite ease-in-out 3s; }
+    .fly-5 { top: 50%; left: 5%; animation: floatPath2 10s infinite ease-in-out 1.5s; }
+    .fly-6 { top: 40%; right: 5%; animation: floatPath3 12s infinite ease-in-out 2s; }
+    .fly-7 { top: 80%; left: 25%; animation: floatPath1 14s infinite ease-in-out 4s; }
+    .fly-8 { top: 10%; right: 30%; animation: floatPath2 11s infinite ease-in-out 1s; }
+    .fly-9 { top: 65%; right: 15%; animation: floatPath3 15s infinite ease-in-out 2.5s; }
+    .fly-10 { bottom: 5%; right: 35%; animation: floatPath1 13s infinite ease-in-out 0.5s; }
+    .fly-11 { top: 5%; left: 40%; animation: floatPath2 16s infinite ease-in-out 3.5s; }
+    .fly-12 { top: 55%; right: 45%; animation: floatPath3 12s infinite ease-in-out 1.2s; }
+    .fly-13 { bottom: 25%; left: 5%; animation: floatPath1 14s infinite ease-in-out 4.5s; }
+    .fly-14 { top: 75%; right: 5%; animation: floatPath2 11s infinite ease-in-out 0.8s; }
+    .fly-15 { top: 30%; left: 35%; animation: floatPath3 15s infinite ease-in-out 2.2s; }
+
     @keyframes flapWings { 0% { transform: scaleX(1) scaleY(1.05); } 100% { transform: scaleX(0.2) scaleY(0.95); } }
     @keyframes floatPath1 { 0% { transform: translate(0, 0) rotate(15deg); } 33% { transform: translate(60px, -80px) rotate(45deg); } 66% { transform: translate(120px, 30px) rotate(-10deg); } 100% { transform: translate(0, 0) rotate(15deg); } }
     @keyframes floatPath2 { 0% { transform: translate(0, 0) rotate(-20deg); } 33% { transform: translate(-80px, -40px) rotate(-40deg); } 66% { transform: translate(-30px, 90px) rotate(15deg); } 100% { transform: translate(0, 0) rotate(-20deg); } }
@@ -245,7 +259,7 @@
 
   <div class="bg-particles"></div>
 
-  <!-- ENREDADERAS Y MARIPOSAS -->
+  <!-- ENREDADERAS Y 15 MARIPOSAS -->
   <div class="vines-container" id="vinesContainer">
     <div class="vine-edge vine-v vine-left"></div>
     <div class="vine-edge vine-v vine-right"></div>
@@ -255,6 +269,17 @@
     <div class="fly-container fly-2" style="transform: scale(0.75);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C20,5 0,25 15,45 C25,55 35,55 45,55 C20,75 10,100 35,80 C42,73 45,60 50,55 C55,60 58,73 65,80 C90,100 80,75 55,55 C65,55 75,55 85,45 C100,25 80,5 50,45 Z" fill="var(--neon-blue)"/></svg></div>
     <div class="fly-container fly-3" style="transform: scale(1.1);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C25,15 5,25 10,45 C15,60 30,65 40,60 C25,75 20,95 40,85 C45,82 50,70 50,60 C50,70 55,82 60,85 C80,95 75,75 60,60 C70,65 85,60 90,45 C95,25 75,15 50,45 Z" fill="var(--neon-blue)"/></svg></div>
     <div class="fly-container fly-4" style="transform: scale(0.8);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C30,10 5,15 5,35 C5,50 25,60 40,55 C20,70 15,90 35,90 C45,90 50,75 50,60 C50,75 55,90 65,90 C85,90 80,70 60,55 C75,60 95,50 95,35 C95,15 70,10 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-5" style="transform: scale(0.85);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C20,5 0,25 15,45 C25,55 35,55 45,55 C20,75 10,100 35,80 C42,73 45,60 50,55 C55,60 58,73 65,80 C90,100 80,75 55,55 C65,55 75,55 85,45 C100,25 80,5 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-6" style="transform: scale(1.0);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C25,15 5,25 10,45 C15,60 30,65 40,60 C25,75 20,95 40,85 C45,82 50,70 50,60 C50,70 55,82 60,85 C80,95 75,75 60,60 C70,65 85,60 90,45 C95,25 75,15 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-7" style="transform: scale(0.7);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C30,10 5,15 5,35 C5,50 25,60 40,55 C20,70 15,90 35,90 C45,90 50,75 50,60 C50,75 55,90 65,90 C85,90 80,70 60,55 C75,60 95,50 95,35 C95,15 70,10 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-8" style="transform: scale(0.95);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C20,5 0,25 15,45 C25,55 35,55 45,55 C20,75 10,100 35,80 C42,73 45,60 50,55 C55,60 58,73 65,80 C90,100 80,75 55,55 C65,55 75,55 85,45 C100,25 80,5 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-9" style="transform: scale(0.65);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C25,15 5,25 10,45 C15,60 30,65 40,60 C25,75 20,95 40,85 C45,82 50,70 50,60 C50,70 55,82 60,85 C80,95 75,75 60,60 C70,65 85,60 90,45 C95,25 75,15 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-10" style="transform: scale(1.05);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C30,10 5,15 5,35 C5,50 25,60 40,55 C20,70 15,90 35,90 C45,90 50,75 50,60 C50,75 55,90 65,90 C85,90 80,70 60,55 C75,60 95,50 95,35 C95,15 70,10 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-11" style="transform: scale(0.75);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C20,5 0,25 15,45 C25,55 35,55 45,55 C20,75 10,100 35,80 C42,73 45,60 50,55 C55,60 58,73 65,80 C90,100 80,75 55,55 C65,55 75,55 85,45 C100,25 80,5 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-12" style="transform: scale(1.15);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C25,15 5,25 10,45 C15,60 30,65 40,60 C25,75 20,95 40,85 C45,82 50,70 50,60 C50,70 55,82 60,85 C80,95 75,75 60,60 C70,65 85,60 90,45 C95,25 75,15 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-13" style="transform: scale(0.85);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C30,10 5,15 5,35 C5,50 25,60 40,55 C20,70 15,90 35,90 C45,90 50,75 50,60 C50,75 55,90 65,90 C85,90 80,70 60,55 C75,60 95,50 95,35 C95,15 70,10 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-14" style="transform: scale(0.9);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C20,5 0,25 15,45 C25,55 35,55 45,55 C20,75 10,100 35,80 C42,73 45,60 50,55 C55,60 58,73 65,80 C90,100 80,75 55,55 C65,55 75,55 85,45 C100,25 80,5 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-15" style="transform: scale(1.2);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C25,15 5,25 10,45 C15,60 30,65 40,60 C25,75 20,95 40,85 C45,82 50,70 50,60 C50,70 55,82 60,85 C80,95 75,75 60,60 C70,65 85,60 90,45 C95,25 75,15 50,45 Z" fill="var(--neon-blue)"/></svg></div>
   </div>
 
   <!-- REPRODUCTOR MÚSICA -->
@@ -345,8 +370,8 @@
 
   <script>
     const mapData = {
-      iglesia: { title: 'Ceremonia Religiosa', theme: 'theme-iglesia', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15051.46231908027!2d-99.168662!3d19.416862!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff36696b9631%3A0xe21516e87f7142!2sParroquia%20Sagrada%20Familia!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx', externalUrl: 'https://share.google/84EYtfltMP0tWc510' },
-      jardin: { title: 'Recepción y Fiesta', theme: 'theme-jardin', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15052.5!2d-99.18!3d19.40!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff!2sJardin%20de%20Eventos!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx', externalUrl: 'https://maps.app.goo.gl/x2Rn8SRfd3E4r3JV8' }
+      iglesia: { title: 'Ceremonia Religiosa', theme: 'theme-iglesia', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.022697833984!2d-98.95411362451898!3d19.368169842734886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e26bd05a6d25%3A0xa8502f7f9816d759!2sParroquia%20de%20Santa%20Mar%C3%ADa%20Magdalena%20de%20Atlicpac!5e0!3m2!1ses-419!2smx!4v1790624027111!5m2!1ses-419!2smx', externalUrl: 'https://share.google/gkqFt4Y1guB9mTgLx' },
+      jardin: { title: 'Recepción y Fiesta', theme: 'theme-jardin', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.8869055250884!2d-98.94101392451881!3d19.374049042547664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e3eef972155d%3A0x41e0b637c050f1ee!2sEl%20Encanto%2C%20Jard%C3%ADn%20de%20Eventos!5e0!3m2!1ses-419!2smx!4v1790623866884!5m2!1ses-419!2smx', externalUrl: 'https://maps.app.goo.gl/BBn9hua3kwDdVXr7A' }
     };
 
     let isOpened = false;
