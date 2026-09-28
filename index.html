@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis 15 Años - Shelani Esmeralda</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Great+Vibes&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --butterfly-pink: #ff99cc;
+      --butterfly-blue: #99ffff;
+      --butterfly-gold: #ffe066;
+      --butterfly-purple: #b026ff;
+      --neon-green: #39ff14;
+      --neon-blue: #00f5ff;
+      --bg-base: #12091f;
+      --text-main: #ffffff;
+      --text-secondary: var(--butterfly-blue);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border-color: rgba(153, 255, 255, 0.2);
+      --shadow-color: rgba(176, 38, 255, 0.3);
+      --btn-bg: transparent;
+      --btn-text: #ffffff;
+    }
+
+    body.theme-iglesia {
+      --bg-base: #f4efe6; --text-main: #2c3e50; --text-secondary: #27ae60;
+      --card-bg: rgba(0, 0, 0, 0.03); --border-color: rgba(39, 174, 96, 0.4);
+      --shadow-color: rgba(39, 174, 96, 0.2); --btn-bg: #27ae60; --btn-text: #ffffff;
+    }
+
+    body.theme-jardin {
+      --bg-base: #05020a; --text-main: #ffffff; --text-secondary: #ff007f;
+      --card-bg: rgba(20, 10, 35, 0.85); --border-color: #ff007f;
+      --shadow-color: rgba(255, 0, 127, 0.5); --btn-bg: transparent; --btn-text: #ff007f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-base); color: var(--text-main);
+      font-family: 'Montserrat', sans-serif; min-height: 100vh;
+      display: flex; justify-content: center; align-items: center;
+      overflow-x: hidden; transition: background-color 0.8s ease, color 0.8s ease;
+    }
+
+    .bg-particles {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(26, 15, 45, 0.6) 0%, rgba(5, 2, 10, 0.8) 100%);
+      z-index: -1;
+    }
+
+    .mobile-container {
+      width: 100%; max-width: 430px; min-height: 100vh; position: relative;
+      padding: 40px 15px; display: flex; flex-direction: column; align-items: center; z-index: 10;
+    }
+
+    /* SOBRE Y CARTA INICIAL */
+    .envelope-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #05020a; z-index: 1000; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; transition: opacity 1s ease 1s, visibility 1s ease 1s;
+    }
+    .envelope-overlay.opened { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .envelope-wrapper { position: relative; width: 290px; height: 200px; cursor: pointer; }
+    .envelope {
+      position: absolute; width: 100%; height: 100%;
+      background: linear-gradient(145deg, #1d0f35, #0c0517); border-radius: 0 0 12px 12px;
+      border: 1px solid var(--border-color); box-shadow: 0 0 30px var(--shadow-color); z-index: 3;
+    }
+    .flap {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(145deg, #261347, #130726); clip-path: polygon(0 0, 100% 0, 50% 55%);
+      transform-origin: top; transition: transform 0.8s ease-in-out; z-index: 4;
+    }
+    .seal-btn {
+      position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+      width: 60px; height: 60px; background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink), var(--butterfly-gold));
+      border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 26px;
+      box-shadow: 0 0 20px rgba(255, 224, 102, 0.8); z-index: 5; transition: opacity 0.4s ease;
+    }
+    .preview-letter {
+      position: absolute; bottom: 0; left: 5%; width: 90%; height: 85%;
+      background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(5px);
+      border-radius: 10px 10px 0 0; border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.8s ease-in-out 0.4s; z-index: 2; display: flex;
+      justify-content: center; align-items: center; color: var(--butterfly-gold);
+      font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 2px;
+    }
+    .envelope-wrapper.open .flap { transform: rotateX(180deg); z-index: 1; }
+    .envelope-wrapper.open .seal-btn { opacity: 0; }
+    .envelope-wrapper.open .preview-letter { transform: translateY(-80px); z-index: 2; }
+    .envelope-instruction {
+      margin-top: 40px; font-family: 'Cinzel', serif; letter-spacing: 2px;
+      color: #fff; text-shadow: 0 0 8px var(--butterfly-blue); font-size: 0.85rem;
+      animation: pulse 1.5s infinite alternate;
+    }
+    @keyframes pulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    /* RÁFAGA DE MARIPOSAS */
+    .butterfly-fly {
+      position: fixed; font-size: 28px; pointer-events: none; z-index: 2000; opacity: 0;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); animation: flyOut 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+    @keyframes flyOut {
+      0% { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--x), var(--y)) scale(1.4) rotate(var(--rot)); opacity: 0; }
+    }
+
+    /* ENREDADERAS Y MARIPOSAS FIJAS */
+    .vines-container {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none; z-index: 5; opacity: 0; transition: opacity 2s ease 1.2s; 
+    }
+    .vines-container.active { opacity: 1; }
+    @keyframes glowSway { 0% { filter: drop-shadow(0 0 5px rgba(57, 255, 20, 0.5)); opacity: 0.8; } 100% { filter: drop-shadow(0 0 15px rgba(57, 255, 20, 1)); opacity: 1; } }
+    .vine-edge { position: absolute; animation: glowSway 3.5s infinite alternate ease-in-out; }
+    .vine-v {
+      width: 150px; height: 100%; background-size: 150px 400px;
+      background-image: url('data:image/svg+xml;utf8,<svg width="150" height="400" xmlns="http://www.w3.org/2000/svg"><path d="M75,-10 C 110,100 40,300 75,410" fill="none" stroke="%2339ff14" stroke-width="3" opacity="0.9"/><path d="M75,-10 C 40,100 110,300 75,410" fill="none" stroke="%2339ff14" stroke-width="1.5" opacity="0.6"/><g fill="%2339ff14"><path transform="translate(85, 50) rotate(30) scale(0.9)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.8"/><path transform="translate(60, 120) rotate(-45) scale(0.6)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.9"/><path transform="translate(90, 200) rotate(60) scale(1.1)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.7"/><path transform="translate(55, 280) rotate(-30) scale(0.5)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="1"/><path transform="translate(80, 360) rotate(45) scale(0.85)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.9"/><path transform="translate(65, 80) rotate(-60) scale(0.7)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.85"/><path transform="translate(85, 160) rotate(20) scale(0.4)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.9"/><path transform="translate(55, 240) rotate(-70) scale(1.0)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.75"/><path transform="translate(95, 320) rotate(50) scale(0.8)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.8"/><path transform="translate(60, 390) rotate(-20) scale(0.6)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="1"/></g></svg>');
+      background-repeat: repeat-y;
+    }
+    .vine-h {
+      width: 100%; height: 150px; background-size: 400px 150px;
+      background-image: url('data:image/svg+xml;utf8,<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg"><path d="M-10,75 C 100,110 300,40 410,75" fill="none" stroke="%2339ff14" stroke-width="3" opacity="0.9"/><path d="M-10,75 C 100,40 300,110 410,75" fill="none" stroke="%2339ff14" stroke-width="1.5" opacity="0.6"/><g fill="%2339ff14"><path transform="translate(50, 85) rotate(120) scale(0.9)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.8"/><path transform="translate(120, 60) rotate(45) scale(0.6)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.9"/><path transform="translate(200, 90) rotate(150) scale(1.1)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.7"/><path transform="translate(280, 55) rotate(60) scale(0.5)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="1"/><path transform="translate(360, 80) rotate(135) scale(0.85)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.9"/><path transform="translate(80, 65) rotate(30) scale(0.7)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.85"/><path transform="translate(160, 85) rotate(110) scale(0.4)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.9"/><path transform="translate(240, 55) rotate(20) scale(1.0)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.75"/><path transform="translate(320, 95) rotate(140) scale(0.8)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="0.8"/><path transform="translate(390, 60) rotate(70) scale(0.6)" d="M0,0 C-15,-10 -25,-30 0,-50 C25,-30 15,-10 0,0 Z" opacity="1"/></g></svg>');
+      background-repeat: repeat-x;
+    }
+    .vine-left { top: 0; left: -40px; } .vine-right { top: 0; right: -40px; transform: scaleX(-1); }
+    .vine-top { top: -40px; left: 0; } .vine-bottom { bottom: -40px; left: 0; transform: scaleY(-1); }
+    
+    .fly-container { position: absolute; width: 45px; height: 45px; z-index: 6; pointer-events: none; }
+    .svg-butterfly { width: 100%; height: 100%; filter: drop-shadow(0 0 10px var(--neon-blue)); animation: flapWings 0.45s infinite alternate ease-in-out; transform-origin: center; }
+    .fly-1 { top: 15%; left: 8%; animation: floatPath1 12s infinite ease-in-out; }
+    .fly-2 { top: 25%; right: 10%; animation: floatPath2 14s infinite ease-in-out reverse; }
+    .fly-3 { bottom: 12%; left: 15%; animation: floatPath3 11s infinite ease-in-out; }
+    .fly-4 { bottom: 20%; right: 8%; animation: floatPath1 13s infinite ease-in-out 3s; }
+    @keyframes flapWings { 0% { transform: scaleX(1) scaleY(1.05); } 100% { transform: scaleX(0.2) scaleY(0.95); } }
+    @keyframes floatPath1 { 0% { transform: translate(0, 0) rotate(15deg); } 33% { transform: translate(60px, -80px) rotate(45deg); } 66% { transform: translate(120px, 30px) rotate(-10deg); } 100% { transform: translate(0, 0) rotate(15deg); } }
+    @keyframes floatPath2 { 0% { transform: translate(0, 0) rotate(-20deg); } 33% { transform: translate(-80px, -40px) rotate(-40deg); } 66% { transform: translate(-30px, 90px) rotate(15deg); } 100% { transform: translate(0, 0) rotate(-20deg); } }
+    @keyframes floatPath3 { 0% { transform: translate(0, 0) rotate(5deg); } 33% { transform: translate(70px, -60px) rotate(30deg); } 66% { transform: translate(30px, -100px) rotate(-20deg); } 100% { transform: translate(0, 0) rotate(5deg); } }
+
+    /* CONTENIDO PRINCIPAL */
+    .invitation-card {
+      width: 100%; background: var(--card-bg); border-radius: 20px; padding: 30px 20px;
+      border: 1px solid var(--border-color); backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px var(--shadow-color); text-align: center; display: flex;
+      flex-direction: column; gap: 25px; transition: all 0.8s ease;
+    }
+    .butterfly-separator { font-size: 2.8rem; margin: -10px 0; background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink), var(--butterfly-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header-subtitle { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 4px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 5px; }
+    .main-title { font-family: 'Great Vibes', cursive; font-size: 3.2rem; background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink), var(--butterfly-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
+    
+    /* ==========================================
+       MARCO CON CORONA (OPTIMIZADO PARA PNG)
+       ========================================== */
+    .photo-frame-container {
+      position: relative;
+      width: 250px; 
+      height: 250px; 
+      margin: 20px auto; 
+      flex-shrink: 0; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .the-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      z-index: 2;
+      /* Eliminado mix-blend-mode porque el PNG ya es transparente */
+      pointer-events: none;
+    }
+    .the-photo {
+      position: absolute;
+      width: 53%; 
+      height: 60%; 
+      top: 24%;
+      left: 23.5%;
+      object-fit: cover;
+      border-radius: 50%;
+      z-index: 1;
+      box-shadow: 0 0 15px rgba(0,0,0,0.8);
+    }
+
+    .invitation-text { font-size: 0.95rem; line-height: 1.6; color: var(--text-main); font-weight: 300; padding: 0 10px; }
+    .data-section { display: flex; flex-direction: column; gap: 15px; }
+    .info-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 18px; border-radius: 15px; text-align: center; }
+    .info-card h3 { font-family: 'Cinzel', serif; color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 5px; }
+    .info-card p { font-size: 0.85rem; color: var(--text-main); margin-bottom: 12px; }
+
+    /* BOTONES */
+    .btn-view-info, .btn-rsvp-main {
+      display: inline-block; padding: 10px 20px; background: var(--btn-bg); color: var(--btn-text);
+      border: 1px solid var(--text-secondary); border-radius: 25px; text-decoration: none;
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease; width: 100%;
+    }
+    .btn-rsvp-main { background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink)); color: #12091f; border: none; font-weight: 700; margin-top: 10px; box-shadow: 0 0 15px rgba(255, 153, 204, 0.5); }
+
+    /* OVERLAYS (MAPA Y RSVP) */
+    .overlay-window {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.85); z-index: 2000; display: flex;
+      justify-content: center; align-items: center; opacity: 0; visibility: hidden;
+      transition: opacity 0.5s ease; backdrop-filter: blur(5px);
+    }
+    .overlay-window.active { opacity: 1; visibility: visible; }
+    .overlay-container {
+      width: 90%; max-width: 400px; background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 20px; padding: 20px; position: relative; box-shadow: 0 0 30px var(--shadow-color);
+    }
+    .btn-close-overlay { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
+    .map-iframe { width: 100%; height: 250px; border-radius: 12px; border: none; margin-top: 25px; margin-bottom: 15px; }
+    
+    /* FORMULARIO RSVP */
+    .rsvp-form { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
+    .rsvp-input {
+      width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.05); color: #fff; font-family: 'Montserrat', sans-serif; outline: none;
+    }
+    .rsvp-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+    .btn-submit-rsvp {
+      padding: 12px; background: linear-gradient(135deg, var(--butterfly-gold), var(--butterfly-pink));
+      color: #12091f; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; letter-spacing: 1px;
+    }
+
+    /* BOTÓN DE MÚSICA */
+    .music-btn {
+      position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px;
+      border-radius: 50%; background: var(--card-bg); border: 1px solid var(--butterfly-gold);
+      color: var(--butterfly-gold); display: flex; justify-content: center; align-items: center;
+      font-size: 18px; z-index: 100; cursor: pointer; box-shadow: 0 0 15px rgba(255, 224, 102, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-particles"></div>
+
+  <!-- ENREDADERAS Y MARIPOSAS -->
+  <div class="vines-container" id="vinesContainer">
+    <div class="vine-edge vine-v vine-left"></div>
+    <div class="vine-edge vine-v vine-right"></div>
+    <div class="vine-edge vine-h vine-top"></div>
+    <div class="vine-edge vine-h vine-bottom"></div>
+    <div class="fly-container fly-1" style="transform: scale(0.9);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C30,10 5,15 5,35 C5,50 25,60 40,55 C20,70 15,90 35,90 C45,90 50,75 50,60 C50,75 55,90 65,90 C85,90 80,70 60,55 C75,60 95,50 95,35 C95,15 70,10 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-2" style="transform: scale(0.75);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C20,5 0,25 15,45 C25,55 35,55 45,55 C20,75 10,100 35,80 C42,73 45,60 50,55 C55,60 58,73 65,80 C90,100 80,75 55,55 C65,55 75,55 85,45 C100,25 80,5 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-3" style="transform: scale(1.1);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C25,15 5,25 10,45 C15,60 30,65 40,60 C25,75 20,95 40,85 C45,82 50,70 50,60 C50,70 55,82 60,85 C80,95 75,75 60,60 C70,65 85,60 90,45 C95,25 75,15 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+    <div class="fly-container fly-4" style="transform: scale(0.8);"><svg class="svg-butterfly" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,45 C30,10 5,15 5,35 C5,50 25,60 40,55 C20,70 15,90 35,90 C45,90 50,75 50,60 C50,75 55,90 65,90 C85,90 80,70 60,55 C75,60 95,50 95,35 C95,15 70,10 50,45 Z" fill="var(--neon-blue)"/></svg></div>
+  </div>
+
+  <!-- REPRODUCTOR MÚSICA -->
+  <audio id="bg-music" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+  <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
+
+  <!-- PANTALLA INICIAL (SOBRE) -->
+  <div class="envelope-overlay" id="envelopeOverlay">
+    <div class="envelope-wrapper" id="envelopeWrapper" onclick="startOpeningSequence()">
+      <div class="flap"></div>
+      <div class="envelope"></div>
+      <div class="seal-btn">🦋</div>
+      <div class="preview-letter">SHELANI 15</div>
+    </div>
+    <p class="envelope-instruction">TOCA EL SOBRE PARA ABRIR</p>
+  </div>
+
+  <!-- OVERLAY DE MAPAS -->
+  <div class="overlay-window" id="mapOverlay">
+    <div class="overlay-container">
+      <button class="btn-close-overlay" onclick="closeMap()">✕</button>
+      <h3 id="mapTitle" style="font-family: 'Cinzel', serif; color: var(--text-secondary); text-align: center;">Ubicación</h3>
+      <iframe class="map-iframe" id="mapIframe" src="" allowfullscreen="" loading="lazy"></iframe>
+      <a href="" id="mapExternalLink" target="_blank" class="btn-view-info" style="text-align: center;">📍 ABRIR EN GOOGLE MAPS APP</a>
+    </div>
+  </div>
+
+  <!-- OVERLAY DE RSVP -->
+  <div class="overlay-window" id="rsvpOverlay">
+    <div class="overlay-container">
+      <button class="btn-close-overlay" onclick="closeRSVP()">✕</button>
+      <h3 style="font-family: 'Cinzel', serif; color: var(--text-secondary); text-align: center;">Confirmación</h3>
+      <p style="font-size: 0.8rem; text-align: center; margin-top: 5px; color: var(--text-main);">Por favor, confirma tu asistencia y la cantidad de invitados.</p>
+      
+      <form class="rsvp-form" id="rsvpForm" onsubmit="submitRSVP(event)">
+        <input type="text" id="guestName" class="rsvp-input" placeholder="Nombre completo / Familia" required>
+        <input type="number" id="guestCount" class="rsvp-input" placeholder="¿Cuántas personas asisten?" min="1" max="10" required>
+        <button type="submit" class="btn-submit-rsvp">✉️ ENVIAR CONFIRMACIÓN</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CONTENIDO DE LA INVITACIÓN -->
+  <div class="mobile-container">
+    <div class="invitation-card">
+      <div class="butterfly-separator">🦋</div>
+
+      <div>
+        <p class="header-subtitle">Mis 15 Años</p>
+        <h1 class="main-title">Shelani Esmeralda</h1>
+        <p class="header-subtitle">Camacho Casaos</p>
+        
+        <!-- CONTENEDOR CON LA FOTO Y EL MARCO DE CORONA -->
+        <div class="photo-frame-container">
+          <!-- AHORA USANDO EXTENSIÓN .PNG PARA EL MARCO TRANSPARENTE -->
+          <img class="the-photo" src="foto_shelani.jpeg" alt="Shelani Esmeralda">
+          <img class="the-frame" src="image_ffdf38.png" alt="Marco de corona">
+        </div>
+      </div>
+
+      <p class="invitation-text">
+        Con la bendición de Dios y el amor de mi familia, celebro la alegría de cumplir quince años. ¡Tu presencia hará este día aún más especial!
+      </p>
+
+      <div class="data-section">
+        <div class="info-card">
+          <h3>Ceremonia Religiosa</h3>
+          <p>Sábado 5 Diciembre 2026<br>Hora: 6:00 PM</p>
+          <button class="btn-view-info" onclick="showMap('iglesia')">📍 VER INFO DE LA IGLESIA</button>
+        </div>
+
+        <div class="info-card">
+          <h3>Recepción / Jardín</h3>
+          <p>Sábado 5 Diciembre 2026<br>Hora: 8:00 PM</p>
+          <button class="btn-view-info" onclick="showMap('jardin')">🎉 VER INFO DEL JARDÍN</button>
+        </div>
+      </div>
+      
+      <button class="btn-rsvp-main" onclick="openRSVP()">💌 CONFIRMAR ASISTENCIA</button>
+
+      <p style="font-family: 'Great Vibes', cursive; font-size: 1.8rem; color: var(--butterfly-gold); margin-top: 10px;">
+        ¡Te espero para celebrar juntos!
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const mapData = {
+      iglesia: { title: 'Ceremonia Religiosa', theme: 'theme-iglesia', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15051.46231908027!2d-99.168662!3d19.416862!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff36696b9631%3A0xe21516e87f7142!2sParroquia%20Sagrada%20Familia!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx', externalUrl: 'https://share.google/84EYtfltMP0tWc510' },
+      jardin: { title: 'Recepción y Fiesta', theme: 'theme-jardin', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15052.5!2d-99.18!3d19.40!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff!2sJardin%20de%20Eventos!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx', externalUrl: 'https://maps.app.goo.gl/x2Rn8SRfd3E4r3JV8' }
+    };
+
+    let isOpened = false;
+
+    function startOpeningSequence() {
+      if (isOpened) return;
+      isOpened = true;
+      document.getElementById('envelopeWrapper').classList.add('open');
+      document.getElementById('bg-music').play().catch(e => console.log("Audio prevenido"));
+      setTimeout(() => { for (let i = 0; i < 20; i++) setTimeout(createButterflyBurst, i * 60); }, 300);
+      setTimeout(() => { document.getElementById('envelopeOverlay').classList.add('opened'); }, 1600);
+      setTimeout(() => { document.getElementById('vinesContainer').classList.add('active'); }, 1800);
+    }
+
+    function createButterflyBurst() {
+      const butterfly = document.createElement('div');
+      butterfly.classList.add('butterfly-fly'); butterfly.innerText = '🦋';
+      butterfly.style.left = '50%'; butterfly.style.top = '50%';
+      butterfly.style.setProperty('--x', (Math.random() - 0.5) * 600 + 'px');
+      butterfly.style.setProperty('--y', (Math.random() * -400 - 150) + 'px');
+      butterfly.style.setProperty('--rot', (Math.random() - 0.5) * 120 + 'deg');
+      const colors = ['#ff99cc', '#99ffff', '#ffe066', '#b026ff'];
+      butterfly.style.color = colors[Math.floor(Math.random() * colors.length)];
+      document.body.appendChild(butterfly);
+      setTimeout(() => { butterfly.remove(); }, 3000);
+    }
+
+    function showMap(type) {
+      const data = mapData[type];
+      document.body.className = data.theme;
+      document.getElementById('mapTitle').innerText = data.title;
+      document.getElementById('mapIframe').src = data.embedUrl;
+      document.getElementById('mapExternalLink').href = data.externalUrl;
+      document.getElementById('mapOverlay').classList.add('active');
+    }
+    
+    function closeMap() {
+      document.getElementById('mapOverlay').classList.remove('active');
+      document.getElementById('mapIframe').src = "";
+      document.body.className = "";
+    }
+
+    function openRSVP() { document.getElementById('rsvpOverlay').classList.add('active'); }
+    function closeRSVP() { document.getElementById('rsvpOverlay').classList.remove('active'); }
+    
+    function submitRSVP(e) {
+      e.preventDefault();
+      const name = document.getElementById('guestName').value;
+      const count = document.getElementById('guestCount').value;
+      alert("¡Gracias " + name + "! Se ha confirmado la asistencia para " + count + " personas.");
+      closeRSVP();
+      document.getElementById('rsvpForm').reset();
+    }
+
+    function toggleMusic() {
+      const music = document.getElementById('bg-music');
+      const btn = document.getElementById('musicToggle');
+      if (music.paused) { music.play(); btn.innerHTML = "🎵"; } 
+      else { music.pause(); btn.innerHTML = "🔇"; }
+    }
+  </script>
+</body>
+</html>
