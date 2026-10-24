@@ -20,7 +20,7 @@
       --bg-base: #12091f;
       --text-main: #ffffff;
       --text-secondary: var(--butterfly-blue);
-      --card-bg: rgba(20, 11, 35, 0.58);
+      --card-bg: rgba(20, 11, 35, 0.86);
       --border-color: rgba(153, 255, 255, 0.25);
       --shadow-color: rgba(176, 38, 255, 0.35);
       --btn-bg: rgba(255, 255, 255, 0.04);
@@ -29,54 +29,59 @@
 
     body.theme-iglesia {
       --bg-base: #f4efe6; --text-main: #2c3e50; --text-secondary: #27ae60;
-      --card-bg: rgba(255, 255, 255, 0.85); --border-color: rgba(39, 174, 96, 0.4);
+      --card-bg: rgba(255, 255, 255, 0.92); --border-color: rgba(39, 174, 96, 0.4);
       --shadow-color: rgba(39, 174, 96, 0.2); --btn-bg: #27ae60; --btn-text: #ffffff;
     }
 
     body.theme-jardin {
       --bg-base: #05020a; --text-main: #ffffff; --text-secondary: #ff007f;
-      --card-bg: rgba(20, 10, 35, 0.85); --border-color: #ff007f;
+      --card-bg: rgba(20, 10, 35, 0.92); --border-color: #ff007f;
       --shadow-color: rgba(255, 0, 127, 0.5); --btn-bg: transparent; --btn-text: #ff007f;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    /* IMPORTANTE: No usar scroll-behavior: smooth en html porque bloquea el scroll inercial a 120Hz en iOS */
 
     body {
       background-color: var(--bg-base); color: var(--text-main);
       font-family: 'Montserrat', sans-serif; min-height: 100vh;
       display: flex; justify-content: center; align-items: flex-start;
       overflow-x: hidden; transition: background-color 0.8s ease, color 0.8s ease;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* BARRA DE PROGRESO DE LECTURA MAGICA */
+    /* BARRA DE PROGRESO ACELERADA POR GPU (USA SCALE-X EN VEZ DE WIDTH) */
     .scroll-progress-bar {
-      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      position: fixed; top: 0; left: 0; height: 3px; width: 100%;
       background: linear-gradient(90deg, var(--butterfly-blue), var(--butterfly-pink), var(--butterfly-gold));
-      box-shadow: 0 0 12px var(--butterfly-pink); z-index: 950; transition: width 0.1s ease-out;
+      z-index: 950; transform-origin: left center; transform: scaleX(0);
+      will-change: transform; pointer-events: none;
     }
 
-    /* AMBIENTE Y LUCIÉRNAGAS DE FONDO */
+    /* AMBIENTE Y LUCIÉRNAGAS DE FONDO (ACELERADAS POR GPU SIN BOX-SHADOW PESADO) */
     .bg-particles {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background:
         radial-gradient(circle at 20% 25%, rgba(176, 38, 255, 0.16) 0%, transparent 45%),
         radial-gradient(circle at 80% 70%, rgba(0, 245, 255, 0.12) 0%, transparent 45%),
         radial-gradient(circle at 50% 50%, rgba(26, 15, 45, 0.65) 0%, rgba(5, 2, 10, 0.92) 100%);
-      z-index: -2;
+      z-index: -2; pointer-events: none;
+      transform: translateZ(0);
     }
 
     .fireflies-layer {
       position: fixed; inset: 0; pointer-events: none; z-index: 4; overflow: hidden;
+      contain: strict; transform: translateZ(0);
     }
     .firefly {
       position: absolute; border-radius: 50%; pointer-events: none;
+      will-change: transform, opacity;
       animation: floatFirefly var(--ff-dur, 10s) infinite ease-in-out alternate;
     }
     @keyframes floatFirefly {
-      0% { transform: translate(0, 0) scale(0.7); opacity: 0.25; }
-      50% { opacity: 0.9; transform: translate(var(--ff-x, 30px), var(--ff-y, -40px)) scale(1.2); }
-      100% { transform: translate(calc(var(--ff-x, 30px) * -0.7), calc(var(--ff-y, -40px) * 1.4)) scale(0.8); opacity: 0.35; }
+      0% { transform: translate3d(0, 0, 0) scale(0.7); opacity: 0.25; }
+      50% { opacity: 0.9; transform: translate3d(var(--ff-x, 30px), var(--ff-y, -40px), 0) scale(1.15); }
+      100% { transform: translate3d(calc(var(--ff-x, 30px) * -0.7), calc(var(--ff-y, -40px) * 1.3), 0) scale(0.8); opacity: 0.35; }
     }
 
     .mobile-container {
@@ -89,29 +94,25 @@
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: radial-gradient(circle at 50% 45%, #1c0d36 0%, #05020a 75%);
       z-index: 1000; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; transition: opacity 1.1s ease 1.1s, visibility 1.1s ease 1.1s;
+      justify-content: center; align-items: center; transition: opacity 1s ease 1s, visibility 1s ease 1s;
     }
-    .envelope-overlay.opened { opacity: 0; visibility: hidden; pointer-events: none; }
+    .envelope-overlay.opened { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
 
     /* DESTELLO MÁGICO AL ABRIR EL SOBRE */
     .magic-flash {
       position: fixed; inset: 0; pointer-events: none; z-index: 1500;
       background: radial-gradient(circle at 50% 50%, rgba(255, 224, 102, 0.85) 0%, rgba(255, 153, 204, 0.55) 35%, rgba(0, 245, 255, 0.2) 65%, transparent 85%);
-      opacity: 0; transform: scale(0.4);
+      opacity: 0; transform: scale(0.4) translateZ(0);
       transition: opacity 0.9s ease-out, transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .magic-flash.burst {
-      opacity: 1; transform: scale(1.8);
-    }
-    .magic-flash.fade {
-      opacity: 0; transform: scale(2.4);
-    }
+    .magic-flash.burst { opacity: 1; transform: scale(1.8) translateZ(0); }
+    .magic-flash.fade { opacity: 0; transform: scale(2.4) translateZ(0); }
 
     .envelope-wrapper { position: relative; width: 295px; height: 205px; cursor: pointer; }
     .envelope {
       position: absolute; width: 100%; height: 100%;
       background: linear-gradient(145deg, #1d0f35, #0c0517); border-radius: 0 0 14px 14px;
-      border: 1px solid var(--border-color); box-shadow: 0 0 35px var(--shadow-color); z-index: 3;
+      border: 1px solid var(--border-color); box-shadow: 0 0 30px var(--shadow-color); z-index: 3;
     }
     .flap {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -122,11 +123,11 @@
       position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%);
       width: 64px; height: 64px; background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink), var(--butterfly-gold));
       border-radius: 50%; display: flex; justify-content: center; align-items: center;
-      box-shadow: 0 0 25px rgba(255, 224, 102, 0.85); z-index: 5; transition: opacity 0.4s ease; padding: 6px;
+      box-shadow: 0 0 20px rgba(255, 224, 102, 0.8); z-index: 5; transition: opacity 0.4s ease; padding: 6px;
     }
     .preview-letter {
       position: absolute; bottom: 0; left: 5%; width: 90%; height: 85%;
-      background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(5px);
+      background: rgba(35, 20, 60, 0.9);
       border-radius: 10px 10px 0 0; border: 1px solid rgba(255, 255, 255, 0.25);
       transition: transform 0.8s ease-in-out 0.4s; z-index: 2; display: flex;
       justify-content: center; align-items: center; color: var(--butterfly-gold);
@@ -142,50 +143,57 @@
     }
     @keyframes pulse { 0% { opacity: 0.45; } 100% { opacity: 1; } }
 
-    /* RÁFAGA DE MARIPOSAS Y CHISPAS DORADAS AL ABRIR */
+    /* RÁFAGA DE MARIPOSAS Y CHISPAS DORADAS AL ABRIR (SIN FILTER DROP-SHADOW COSTOSO) */
     .butterfly-fly {
-      position: fixed; width: 52px; height: 52px; pointer-events: none; z-index: 2000; opacity: 0;
-      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.9)); animation: flyOut 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      position: fixed; width: 50px; height: 50px; pointer-events: none; z-index: 2000; opacity: 0;
+      will-change: transform, opacity;
+      animation: flyOut 3.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     @keyframes flyOut {
-      0% { transform: translate(-50%, -50%) scale(0.25) rotate(0deg); opacity: 1; }
-      100% { transform: translate(var(--x), var(--y)) scale(1.3) rotate(var(--rot)); opacity: 0; }
+      0% { transform: translate3d(-50%, -50%, 0) scale(0.25) rotate(0deg); opacity: 1; }
+      100% { transform: translate3d(var(--x), var(--y), 0) scale(1.25) rotate(var(--rot)); opacity: 0; }
     }
     .sparkle-particle {
-      position: fixed; width: 7px; height: 7px; border-radius: 50%; pointer-events: none; z-index: 1999;
-      background: #ffe066; box-shadow: 0 0 12px #ffe066, 0 0 20px #ff99cc;
-      animation: sparkleOut 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 1999;
+      background: radial-gradient(circle, #ffffff 0%, #ffe066 55%, transparent 100%);
+      will-change: transform, opacity;
+      animation: sparkleOut 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     @keyframes sparkleOut {
-      0% { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+      0% { transform: translate3d(-50%, -50%, 0) scale(0.4); opacity: 1; }
       70% { opacity: 0.9; }
-      100% { transform: translate(var(--sx), var(--sy)) scale(0); opacity: 0; }
+      100% { transform: translate3d(var(--sx), var(--sy), 0) scale(0); opacity: 0; }
     }
 
-    /* ENREDADERAS BOTÁNICAS ORGÁNICAS */
+    /* ENREDADERAS BOTÁNICAS ORGÁNICAS OPTIMIZADAS PARA GPU MÓVIL
+       (El brillo ya viene horneado dentro del SVG en lugar de recalcular filter: drop-shadow en cada frame) */
     .vines-container {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none; z-index: 5; opacity: 0; transition: opacity 2s ease 1.2s; 
+      pointer-events: none; z-index: 5; opacity: 0; transition: opacity 1.5s ease 0.8s;
+      contain: strict; transform: translateZ(0);
     }
     .vines-container.active { opacity: 1; }
 
     @keyframes glowSway {
-      0% { filter: drop-shadow(0 0 6px rgba(46, 213, 115, 0.45)) drop-shadow(0 0 12px rgba(255, 153, 204, 0.2)); opacity: 0.88; }
-      50% { filter: drop-shadow(0 0 12px rgba(57, 255, 20, 0.75)) drop-shadow(0 0 18px rgba(0, 245, 255, 0.35)); opacity: 0.98; }
-      100% { filter: drop-shadow(0 0 9px rgba(123, 237, 159, 0.65)) drop-shadow(0 0 15px rgba(255, 224, 102, 0.3)); opacity: 0.92; }
+      0% { opacity: 0.84; }
+      100% { opacity: 1; }
     }
 
-    .vine-edge { position: absolute; animation: glowSway 4.5s infinite alternate ease-in-out; }
+    .vine-edge {
+      position: absolute;
+      will-change: opacity;
+      animation: glowSway 4s infinite alternate ease-in-out;
+    }
 
     .vine-v {
       width: 155px; height: 100%; background-size: 155px 520px;
-      background-image: url('data:image/svg+xml;utf8,<svg width="155" height="520" viewBox="0 0 155 520" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="st" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%2310ac84"/><stop offset="50%" stop-color="%232ed573"/><stop offset="100%" stop-color="%237bed9f"/></linearGradient><linearGradient id="lf1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%237bed9f"/><stop offset="65%" stop-color="%232ed573"/><stop offset="100%" stop-color="%23059669"/></linearGradient><linearGradient id="lf2" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="%2300d2d3"/><stop offset="50%" stop-color="%232ed573"/><stop offset="100%" stop-color="%23a3ffac"/></linearGradient><radialGradient id="flwP" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23fff"/><stop offset="45%" stop-color="%23ff99cc"/><stop offset="100%" stop-color="%23b026ff"/></radialGradient><radialGradient id="flwB" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23fff"/><stop offset="45%" stop-color="%2399ffff"/><stop offset="100%" stop-color="%2300a8ff"/></radialGradient></defs><path d="M55,-10 C95,75 20,165 68,260 C112,345 25,435 55,530" fill="none" stroke="url(%23st)" stroke-width="3.2" stroke-linecap="round"/><path d="M38,-10 C12,85 88,175 42,270 C5,355 85,440 38,530" fill="none" stroke="%231dd1a1" stroke-width="1.8" opacity="0.78" stroke-linecap="round"/><path d="M72,-10 C55,95 18,185 75,285 C98,370 30,455 72,530" fill="none" stroke="%237bed9f" stroke-width="1" stroke-dasharray="5 5" opacity="0.55"/><path d="M68,75 C95,62 118,78 106,96 C96,110 78,96 89,85" fill="none" stroke="%237bed9f" stroke-width="1.3" opacity="0.8"/><path d="M35,195 C8,182 -2,202 12,216 C24,226 35,212 24,202" fill="none" stroke="%2300d2d3" stroke-width="1.3" opacity="0.75"/><path d="M76,335 C105,322 122,342 108,358 C96,370 82,354 94,344" fill="none" stroke="%237bed9f" stroke-width="1.3" opacity="0.8"/><path d="M32,445 C6,435 -2,455 12,468 C24,476 34,462 23,453" fill="none" stroke="%231dd1a1" stroke-width="1.2" opacity="0.75"/><g transform="translate(68,38) rotate(38) scale(0.88)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-40 M0,-14 L-7,-22 M0,-24 L7,-32" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(36,68) rotate(-42) scale(0.72)"><path d="M0,0 C-16,-8 -18,-26 0,-42 C18,-26 16,-8 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-36 M0,-15 L6,-23" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(76,112) rotate(55) scale(1.02)"><path d="M0,0 C-15,-12 -22,-32 0,-48 C22,-32 15,-12 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-42 M0,-16 L-8,-25 M0,-26 L8,-35" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(30,152) rotate(-32) scale(0.85)"><path d="M0,0 C-14,-10 -20,-28 0,-44 C20,-28 14,-10 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-38 M0,-14 L-6,-22 M0,-23 L6,-31" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(65,198) rotate(28) scale(0.68)"><path d="M0,0 C-13,-9 -18,-26 0,-40 C18,-26 13,-9 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-34" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(50,242) rotate(-52) scale(0.95)"><path d="M0,0 C-15,-11 -22,-30 0,-46 C22,-30 15,-11 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-40 M0,-15 L-7,-24 M0,-25 L7,-33" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(82,286) rotate(46) scale(0.9)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-40 M0,-16 L-7,-24 M0,-26 L7,-34" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(38,325) rotate(-36) scale(0.75)"><path d="M0,0 C-14,-9 -18,-26 0,-42 C18,-26 14,-9 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-36 M0,-15 L6,-23" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(84,375) rotate(58) scale(1.05)"><path d="M0,0 C-15,-12 -22,-32 0,-48 C22,-32 15,-12 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-42 M0,-16 L-8,-25 M0,-26 L8,-35" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(28,418) rotate(-48) scale(0.88)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-40 M0,-14 L-7,-22 M0,-24 L7,-32" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(68,468) rotate(34) scale(0.8)"><path d="M0,0 C-14,-10 -20,-28 0,-44 C20,-28 14,-10 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-38 M0,-15 L7,-23" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(42,502) rotate(-25) scale(0.7)"><path d="M0,0 C-13,-9 -18,-26 0,-40 C18,-26 13,-9 0,0 Z" fill="url(%23lf2)"/></g><g transform="translate(72,92) scale(0.75)"><circle cx="0" cy="-7" r="5" fill="url(%23flwP)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwP)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwP)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwP)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwP)"/><circle cx="0" cy="0" r="3.2" fill="%23ffe066"/></g><g transform="translate(36,222) scale(0.68)"><circle cx="0" cy="-7" r="5" fill="url(%23flwB)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwB)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwB)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwB)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwB)"/><circle cx="0" cy="0" r="3" fill="%23ffe066"/></g><g transform="translate(78,352) scale(0.78)"><circle cx="0" cy="-7" r="5" fill="url(%23flwP)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwP)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwP)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwP)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwP)"/><circle cx="0" cy="0" r="3.2" fill="%23ffe066"/></g><g transform="translate(42,462) scale(0.65)"><circle cx="0" cy="-7" r="5" fill="url(%23flwB)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwB)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwB)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwB)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwB)"/><circle cx="0" cy="0" r="3" fill="%23ffe066"/></g><circle cx="92" cy="55" r="2.2" fill="%23ffe066" opacity="0.9"/><circle cx="20" cy="130" r="1.8" fill="%2399ffff" opacity="0.85"/><circle cx="98" cy="245" r="2.4" fill="%23ff99cc" opacity="0.9"/><circle cx="18" cy="300" r="2" fill="%23ffe066" opacity="0.85"/><circle cx="95" cy="420" r="2.2" fill="%2399ffff" opacity="0.9"/><circle cx="24" cy="485" r="1.8" fill="%23ff99cc" opacity="0.85"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg width="155" height="520" viewBox="0 0 155 520" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="st" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%2310ac84"/><stop offset="50%" stop-color="%232ed573"/><stop offset="100%" stop-color="%237bed9f"/></linearGradient><linearGradient id="lf1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%237bed9f"/><stop offset="65%" stop-color="%232ed573"/><stop offset="100%" stop-color="%23059669"/></linearGradient><linearGradient id="lf2" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="%2300d2d3"/><stop offset="50%" stop-color="%232ed573"/><stop offset="100%" stop-color="%23a3ffac"/></linearGradient><radialGradient id="flwP" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23fff"/><stop offset="45%" stop-color="%23ff99cc"/><stop offset="100%" stop-color="%23b026ff"/></radialGradient><radialGradient id="flwB" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23fff"/><stop offset="45%" stop-color="%2399ffff"/><stop offset="100%" stop-color="%2300a8ff"/></radialGradient></defs><path d="M55,-10 C95,75 20,165 68,260 C112,345 25,435 55,530" fill="none" stroke="%2339ff14" stroke-width="8" opacity="0.18" stroke-linecap="round"/><path d="M55,-10 C95,75 20,165 68,260 C112,345 25,435 55,530" fill="none" stroke="url(%23st)" stroke-width="3.2" stroke-linecap="round"/><path d="M38,-10 C12,85 88,175 42,270 C5,355 85,440 38,530" fill="none" stroke="%231dd1a1" stroke-width="1.8" opacity="0.78" stroke-linecap="round"/><path d="M72,-10 C55,95 18,185 75,285 C98,370 30,455 72,530" fill="none" stroke="%237bed9f" stroke-width="1" stroke-dasharray="5 5" opacity="0.55"/><path d="M68,75 C95,62 118,78 106,96 C96,110 78,96 89,85" fill="none" stroke="%237bed9f" stroke-width="1.3" opacity="0.8"/><path d="M35,195 C8,182 -2,202 12,216 C24,226 35,212 24,202" fill="none" stroke="%2300d2d3" stroke-width="1.3" opacity="0.75"/><path d="M76,335 C105,322 122,342 108,358 C96,370 82,354 94,344" fill="none" stroke="%237bed9f" stroke-width="1.3" opacity="0.8"/><path d="M32,445 C6,435 -2,455 12,468 C24,476 34,462 23,453" fill="none" stroke="%231dd1a1" stroke-width="1.2" opacity="0.75"/><g transform="translate(68,38) rotate(38) scale(0.88)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-40 M0,-14 L-7,-22 M0,-24 L7,-32" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(36,68) rotate(-42) scale(0.72)"><path d="M0,0 C-16,-8 -18,-26 0,-42 C18,-26 16,-8 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-36 M0,-15 L6,-23" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(76,112) rotate(55) scale(1.02)"><path d="M0,0 C-15,-12 -22,-32 0,-48 C22,-32 15,-12 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-42 M0,-16 L-8,-25 M0,-26 L8,-35" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(30,152) rotate(-32) scale(0.85)"><path d="M0,0 C-14,-10 -20,-28 0,-44 C20,-28 14,-10 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-38 M0,-14 L-6,-22 M0,-23 L6,-31" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(65,198) rotate(28) scale(0.68)"><path d="M0,0 C-13,-9 -18,-26 0,-40 C18,-26 13,-9 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-34" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(50,242) rotate(-52) scale(0.95)"><path d="M0,0 C-15,-11 -22,-30 0,-46 C22,-30 15,-11 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-40 M0,-15 L-7,-24 M0,-25 L7,-33" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(82,286) rotate(46) scale(0.9)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-40 M0,-16 L-7,-24 M0,-26 L7,-34" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(38,325) rotate(-36) scale(0.75)"><path d="M0,0 C-14,-9 -18,-26 0,-42 C18,-26 14,-9 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-36 M0,-15 L6,-23" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(84,375) rotate(58) scale(1.05)"><path d="M0,0 C-15,-12 -22,-32 0,-48 C22,-32 15,-12 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-42 M0,-16 L-8,-25 M0,-26 L8,-35" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(28,418) rotate(-48) scale(0.88)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lf2)"/><path d="M0,-2 L0,-40 M0,-14 L-7,-22 M0,-24 L7,-32" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(68,468) rotate(34) scale(0.8)"><path d="M0,0 C-14,-10 -20,-28 0,-44 C20,-28 14,-10 0,0 Z" fill="url(%23lf1)"/><path d="M0,-2 L0,-38 M0,-15 L7,-23" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(42,502) rotate(-25) scale(0.7)"><path d="M0,0 C-13,-9 -18,-26 0,-40 C18,-26 13,-9 0,0 Z" fill="url(%23lf2)"/></g><g transform="translate(72,92) scale(0.75)"><circle cx="0" cy="-7" r="5" fill="url(%23flwP)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwP)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwP)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwP)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwP)"/><circle cx="0" cy="0" r="3.2" fill="%23ffe066"/></g><g transform="translate(36,222) scale(0.68)"><circle cx="0" cy="-7" r="5" fill="url(%23flwB)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwB)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwB)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwB)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwB)"/><circle cx="0" cy="0" r="3" fill="%23ffe066"/></g><g transform="translate(78,352) scale(0.78)"><circle cx="0" cy="-7" r="5" fill="url(%23flwP)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwP)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwP)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwP)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwP)"/><circle cx="0" cy="0" r="3.2" fill="%23ffe066"/></g><g transform="translate(42,462) scale(0.65)"><circle cx="0" cy="-7" r="5" fill="url(%23flwB)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwB)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwB)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwB)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwB)"/><circle cx="0" cy="0" r="3" fill="%23ffe066"/></g><circle cx="92" cy="55" r="2.2" fill="%23ffe066" opacity="0.9"/><circle cx="20" cy="130" r="1.8" fill="%2399ffff" opacity="0.85"/><circle cx="98" cy="245" r="2.4" fill="%23ff99cc" opacity="0.9"/><circle cx="18" cy="300" r="2" fill="%23ffe066" opacity="0.85"/><circle cx="95" cy="420" r="2.2" fill="%2399ffff" opacity="0.9"/><circle cx="24" cy="485" r="1.8" fill="%23ff99cc" opacity="0.85"/></svg>');
       background-repeat: repeat-y;
     }
 
     .vine-h {
       width: 100%; height: 155px; background-size: 520px 155px;
-      background-image: url('data:image/svg+xml;utf8,<svg width="520" height="155" viewBox="0 0 520 155" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="stH" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%2310ac84"/><stop offset="50%" stop-color="%232ed573"/><stop offset="100%" stop-color="%237bed9f"/></linearGradient><linearGradient id="lfH1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%237bed9f"/><stop offset="65%" stop-color="%232ed573"/><stop offset="100%" stop-color="%23059669"/></linearGradient><linearGradient id="lfH2" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="%2300d2d3"/><stop offset="50%" stop-color="%232ed573"/><stop offset="100%" stop-color="%23a3ffac"/></linearGradient><radialGradient id="flwHP" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23fff"/><stop offset="45%" stop-color="%23ff99cc"/><stop offset="100%" stop-color="%23b026ff"/></radialGradient><radialGradient id="flwHB" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23fff"/><stop offset="45%" stop-color="%2399ffff"/><stop offset="100%" stop-color="%2300a8ff"/></radialGradient></defs><path d="M-10,55 C75,95 165,20 260,68 C345,112 435,25 530,55" fill="none" stroke="url(%23stH)" stroke-width="3.2" stroke-linecap="round"/><path d="M-10,38 C85,12 175,88 270,42 C355,5 440,85 530,38" fill="none" stroke="%231dd1a1" stroke-width="1.8" opacity="0.78" stroke-linecap="round"/><path d="M-10,72 C95,55 185,18 285,75 C370,98 455,30 530,72" fill="none" stroke="%237bed9f" stroke-width="1" stroke-dasharray="5 5" opacity="0.55"/><path d="M75,68 C62,95 78,118 96,106 C110,96 96,78 85,89" fill="none" stroke="%237bed9f" stroke-width="1.3" opacity="0.8"/><path d="M215,35 C202,8 222,-2 236,12 C246,24 232,35 222,24" fill="none" stroke="%2300d2d3" stroke-width="1.3" opacity="0.75"/><path d="M355,76 C342,105 362,122 378,108 C390,96 374,82 364,94" fill="none" stroke="%237bed9f" stroke-width="1.3" opacity="0.8"/><g transform="translate(42,68) rotate(128) scale(0.88)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lfH1)"/><path d="M0,-2 L0,-40 M0,-14 L-7,-22 M0,-24 L7,-32" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(88,36) rotate(48) scale(0.75)"><path d="M0,0 C-16,-8 -18,-26 0,-42 C18,-26 16,-8 0,0 Z" fill="url(%23lfH2)"/><path d="M0,-2 L0,-36 M0,-15 L6,-23" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(142,74) rotate(145) scale(1.0)"><path d="M0,0 C-15,-12 -22,-32 0,-48 C22,-32 15,-12 0,0 Z" fill="url(%23lfH1)"/><path d="M0,-2 L0,-42 M0,-16 L-8,-25 M0,-26 L8,-35" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(195,32) rotate(58) scale(0.85)"><path d="M0,0 C-14,-10 -20,-28 0,-44 C20,-28 14,-10 0,0 Z" fill="url(%23lfH2)"/><path d="M0,-2 L0,-38 M0,-14 L-6,-22" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(258,68) rotate(122) scale(0.92)"><path d="M0,0 C-15,-11 -22,-30 0,-46 C22,-30 15,-11 0,0 Z" fill="url(%23lfH1)"/><path d="M0,-2 L0,-40 M0,-15 L-7,-24 M0,-25 L7,-33" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(312,82) rotate(136) scale(0.88)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lfH2)"/><path d="M0,-2 L0,-40 M0,-16 L-7,-24" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(375,40) rotate(52) scale(0.78)"><path d="M0,0 C-14,-9 -18,-26 0,-42 C18,-26 14,-9 0,0 Z" fill="url(%23lfH1)"/><path d="M0,-2 L0,-36" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(428,78) rotate(148) scale(0.96)"><path d="M0,0 C-15,-12 -22,-32 0,-48 C22,-32 15,-12 0,0 Z" fill="url(%23lfH2)"/><path d="M0,-2 L0,-42 M0,-16 L-8,-25" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(482,42) rotate(62) scale(0.82)"><path d="M0,0 C-14,-10 -20,-28 0,-44 C20,-28 14,-10 0,0 Z" fill="url(%23lfH1)"/></g><g transform="translate(112,72) scale(0.75)"><circle cx="0" cy="-7" r="5" fill="url(%23flwHP)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwHP)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwHP)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwHP)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwHP)"/><circle cx="0" cy="0" r="3.2" fill="%23ffe066"/></g><g transform="translate(285,42) scale(0.68)"><circle cx="0" cy="-7" r="5" fill="url(%23flwHB)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwHB)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwHB)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwHB)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwHB)"/><circle cx="0" cy="0" r="3" fill="%23ffe066"/></g><g transform="translate(452,68) scale(0.74)"><circle cx="0" cy="-7" r="5" fill="url(%23flwHP)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwHP)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwHP)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwHP)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwHP)"/><circle cx="0" cy="0" r="3.2" fill="%23ffe066"/></g><circle cx="65" cy="92" r="2.2" fill="%23ffe066" opacity="0.9"/><circle cx="175" cy="22" r="1.8" fill="%2399ffff" opacity="0.85"/><circle cx="235" cy="95" r="2.4" fill="%23ff99cc" opacity="0.9"/><circle cx="395" cy="92" r="2" fill="%23ffe066" opacity="0.85"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg width="520" height="155" viewBox="0 0 520 155" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="stH" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%2310ac84"/><stop offset="50%" stop-color="%232ed573"/><stop offset="100%" stop-color="%237bed9f"/></linearGradient><linearGradient id="lfH1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%237bed9f"/><stop offset="65%" stop-color="%232ed573"/><stop offset="100%" stop-color="%23059669"/></linearGradient><linearGradient id="lfH2" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="%2300d2d3"/><stop offset="50%" stop-color="%232ed573"/><stop offset="100%" stop-color="%23a3ffac"/></linearGradient><radialGradient id="flwHP" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23fff"/><stop offset="45%" stop-color="%23ff99cc"/><stop offset="100%" stop-color="%23b026ff"/></radialGradient><radialGradient id="flwHB" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23fff"/><stop offset="45%" stop-color="%2399ffff"/><stop offset="100%" stop-color="%2300a8ff"/></radialGradient></defs><path d="M-10,55 C75,95 165,20 260,68 C345,112 435,25 530,55" fill="none" stroke="%2339ff14" stroke-width="8" opacity="0.18" stroke-linecap="round"/><path d="M-10,55 C75,95 165,20 260,68 C345,112 435,25 530,55" fill="none" stroke="url(%23stH)" stroke-width="3.2" stroke-linecap="round"/><path d="M-10,38 C85,12 175,88 270,42 C355,5 440,85 530,38" fill="none" stroke="%231dd1a1" stroke-width="1.8" opacity="0.78" stroke-linecap="round"/><path d="M-10,72 C95,55 185,18 285,75 C370,98 455,30 530,72" fill="none" stroke="%237bed9f" stroke-width="1" stroke-dasharray="5 5" opacity="0.55"/><path d="M75,68 C62,95 78,118 96,106 C110,96 96,78 85,89" fill="none" stroke="%237bed9f" stroke-width="1.3" opacity="0.8"/><path d="M215,35 C202,8 222,-2 236,12 C246,24 232,35 222,24" fill="none" stroke="%2300d2d3" stroke-width="1.3" opacity="0.75"/><path d="M355,76 C342,105 362,122 378,108 C390,96 374,82 364,94" fill="none" stroke="%237bed9f" stroke-width="1.3" opacity="0.8"/><g transform="translate(42,68) rotate(128) scale(0.88)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lfH1)"/><path d="M0,-2 L0,-40 M0,-14 L-7,-22 M0,-24 L7,-32" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(88,36) rotate(48) scale(0.75)"><path d="M0,0 C-16,-8 -18,-26 0,-42 C18,-26 16,-8 0,0 Z" fill="url(%23lfH2)"/><path d="M0,-2 L0,-36 M0,-15 L6,-23" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(142,74) rotate(145) scale(1.0)"><path d="M0,0 C-15,-12 -22,-32 0,-48 C22,-32 15,-12 0,0 Z" fill="url(%23lfH1)"/><path d="M0,-2 L0,-42 M0,-16 L-8,-25 M0,-26 L8,-35" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(195,32) rotate(58) scale(0.85)"><path d="M0,0 C-14,-10 -20,-28 0,-44 C20,-28 14,-10 0,0 Z" fill="url(%23lfH2)"/><path d="M0,-2 L0,-38 M0,-14 L-6,-22" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(258,68) rotate(122) scale(0.92)"><path d="M0,0 C-15,-11 -22,-30 0,-46 C22,-30 15,-11 0,0 Z" fill="url(%23lfH1)"/><path d="M0,-2 L0,-40 M0,-15 L-7,-24 M0,-25 L7,-33" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(312,82) rotate(136) scale(0.88)"><path d="M0,0 C-14,-10 -20,-30 0,-46 C20,-30 14,-10 0,0 Z" fill="url(%23lfH2)"/><path d="M0,-2 L0,-40 M0,-16 L-7,-24" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(375,40) rotate(52) scale(0.78)"><path d="M0,0 C-14,-9 -18,-26 0,-42 C18,-26 14,-9 0,0 Z" fill="url(%23lfH1)"/><path d="M0,-2 L0,-36" stroke="%23dcffe4" stroke-width="0.8" opacity="0.6" fill="none"/></g><g transform="translate(428,78) rotate(148) scale(0.96)"><path d="M0,0 C-15,-12 -22,-32 0,-48 C22,-32 15,-12 0,0 Z" fill="url(%23lfH2)"/><path d="M0,-2 L0,-42 M0,-16 L-8,-25" stroke="%23dcffe4" stroke-width="0.9" opacity="0.65" fill="none"/></g><g transform="translate(482,42) rotate(62) scale(0.82)"><path d="M0,0 C-14,-10 -20,-28 0,-44 C20,-28 14,-10 0,0 Z" fill="url(%23lfH1)"/></g><g transform="translate(112,72) scale(0.75)"><circle cx="0" cy="-7" r="5" fill="url(%23flwHP)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwHP)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwHP)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwHP)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwHP)"/><circle cx="0" cy="0" r="3.2" fill="%23ffe066"/></g><g transform="translate(285,42) scale(0.68)"><circle cx="0" cy="-7" r="5" fill="url(%23flwHB)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwHB)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwHB)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwHB)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwHB)"/><circle cx="0" cy="0" r="3" fill="%23ffe066"/></g><g transform="translate(452,68) scale(0.74)"><circle cx="0" cy="-7" r="5" fill="url(%23flwHP)"/><circle cx="6.5" cy="-2" r="5" fill="url(%23flwHP)"/><circle cx="4" cy="5.5" r="5" fill="url(%23flwHP)"/><circle cx="-4" cy="5.5" r="5" fill="url(%23flwHP)"/><circle cx="-6.5" cy="-2" r="5" fill="url(%23flwHP)"/><circle cx="0" cy="0" r="3.2" fill="%23ffe066"/></g><circle cx="65" cy="92" r="2.2" fill="%23ffe066" opacity="0.9"/><circle cx="175" cy="22" r="1.8" fill="%2399ffff" opacity="0.85"/><circle cx="235" cy="95" r="2.4" fill="%23ff99cc" opacity="0.9"/><circle cx="395" cy="92" r="2" fill="%23ffe066" opacity="0.85"/></svg>');
       background-repeat: repeat-x;
     }
 
@@ -194,23 +202,78 @@
     .vine-top { top: -28px; left: 0; }
     .vine-bottom { bottom: -28px; left: 0; transform: scaleY(-1); }
     
-    /* MARIPOSAS ESTILO ILUSTRACIÓN CON BORDES FESTONEADOS Y CELDAS */
+    /* MARIPOSAS ACELERADAS 100% POR GPU (CSS KEYFRAMES EN VEZ DE SMIL EN HILO PRINCIPAL) */
     .fly-container {
       position: absolute;
-      width: 62px;
-      height: 62px;
+      width: 60px;
+      height: 60px;
       z-index: 6;
       pointer-events: none;
+      will-change: transform;
     }
     .svg-butterfly {
       width: 100%;
       height: 100%;
       overflow: visible;
+      transform: translateZ(0);
     }
-    .bf-cyan { filter: drop-shadow(0 0 9px rgba(0, 245, 255, 0.8)); }
-    .bf-pink { filter: drop-shadow(0 0 9px rgba(255, 102, 179, 0.8)); }
-    .bf-gold { filter: drop-shadow(0 0 9px rgba(255, 224, 102, 0.8)); }
-    .bf-violet { filter: drop-shadow(0 0 9px rgba(176, 38, 255, 0.8)); }
+
+    /* Clases de animación GPU para las alas (a mitad de velocidad: ~1.35s - 1.55s) */
+    .wing-gpu-bob {
+      animation: gpuBob var(--bf-dur, 1.4s) infinite ease-in-out;
+      will-change: transform;
+    }
+    .wing-gpu-back {
+      transform-origin: 98px 92px;
+      animation: gpuSideBack var(--bf-dur, 1.4s) infinite ease-in-out;
+      will-change: transform;
+    }
+    .wing-gpu-fore {
+      transform-origin: 98px 92px;
+      animation: gpuSideFore var(--bf-dur, 1.4s) infinite ease-in-out;
+      will-change: transform;
+    }
+    .wing-gpu-hind {
+      transform-origin: 92px 94px;
+      animation: gpuSideHind var(--bf-dur, 1.4s) infinite ease-in-out;
+      will-change: transform;
+    }
+    .wing-gpu-front-l {
+      transform-origin: 80px 70px;
+      animation: gpuFrontLeft var(--bf-dur, 1.45s) infinite ease-in-out;
+      will-change: transform;
+    }
+    .wing-gpu-front-r {
+      transform-origin: 80px 70px;
+      animation: gpuFrontRight var(--bf-dur, 1.45s) infinite ease-in-out;
+      will-change: transform;
+    }
+
+    @keyframes gpuBob {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -3.5px, 0); }
+    }
+    @keyframes gpuSideBack {
+      0%, 100% { transform: translate(-4px, -3px) rotate(-8deg); }
+      50% { transform: translate(-4px, -3px) rotate(14deg); }
+    }
+    @keyframes gpuSideFore {
+      0%, 100% { transform: rotate(-11deg) skewX(-5deg); }
+      50% { transform: rotate(11deg) skewX(6deg); }
+    }
+    @keyframes gpuSideHind {
+      0%, 100% { transform: rotate(8deg); }
+      45% { transform: rotate(-13deg); }
+      80% { transform: rotate(10deg); }
+    }
+    @keyframes gpuFrontLeft {
+      0%, 100% { transform: translateX(0) scale(1, 1); }
+      50% { transform: translateX(6px) scale(0.54, 0.96); }
+    }
+    @keyframes gpuFrontRight {
+      0%, 100% { transform: translateX(0) scale(1, 1); }
+      50% { transform: translateX(-6px) scale(0.54, 0.96); }
+    }
     
     .fly-1 { top: 14%; left: 6%; animation: floatPath1 18s infinite ease-in-out; }
     .fly-2 { top: 24%; right: 8%; animation: floatPath2 20s infinite ease-in-out reverse; }
@@ -228,39 +291,39 @@
     .fly-14 { top: 75%; right: 4%; animation: floatPath2 17s infinite ease-in-out 0.8s; }
     .fly-15 { top: 30%; left: 30%; animation: floatPath3 21s infinite ease-in-out 2.2s; }
 
-    @keyframes floatPath1 {
-      0% { transform: translate(0, 0) rotate(5deg); }
-      25% { transform: translate(35px, -45px) rotate(12deg); }
-      50% { transform: translate(75px, -85px) rotate(2deg); }
-      75% { transform: translate(95px, 20px) rotate(-6deg); }
-      100% { transform: translate(0, 0) rotate(5deg); }
-    }
-    @keyframes floatPath2 {
-      0% { transform: translate(0, 0) rotate(-8deg); }
-      30% { transform: translate(-65px, -35px) rotate(-14deg); }
-      65% { transform: translate(-25px, 75px) rotate(5deg); }
-      100% { transform: translate(0, 0) rotate(-8deg); }
-    }
-    @keyframes floatPath3 {
-      0% { transform: translate(0, 0) rotate(3deg); }
-      33% { transform: translate(60px, -55px) rotate(11deg); }
-      66% { transform: translate(25px, -95px) rotate(-8deg); }
-      100% { transform: translate(0, 0) rotate(3deg); }
+    /* En celulares más pequeños ocultamos 5 mariposas redundantes para dejar el GPU libre a 120fps */
+    @media (max-width: 480px) {
+      .fly-9, .fly-11, .fly-12, .fly-14, .fly-15 { display: none; }
     }
 
-    /* TARJETA PRINCIPAL CON ENTRADA CINEMATOGRÁFICA DESDE EL SOBRE */
+    @keyframes floatPath1 {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(5deg); }
+      25% { transform: translate3d(35px, -45px, 0) rotate(12deg); }
+      50% { transform: translate3d(75px, -85px, 0) rotate(2deg); }
+      75% { transform: translate3d(95px, 20px, 0) rotate(-6deg); }
+    }
+    @keyframes floatPath2 {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-8deg); }
+      30% { transform: translate3d(-65px, -35px, 0) rotate(-14deg); }
+      65% { transform: translate3d(-25px, 75px, 0) rotate(5deg); }
+    }
+    @keyframes floatPath3 {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(3deg); }
+      33% { transform: translate3d(60px, -55px, 0) rotate(11deg); }
+      66% { transform: translate3d(25px, -95px, 0) rotate(-8deg); }
+    }
+
+    /* TARJETA PRINCIPAL CON FONDO TRASLÚCIDO OPTIMIZADO (SIN BACKDROP-FILTER QUE TRABA IPHONE AL HACER SCROLL) */
     .invitation-card {
       width: 100%;
-      background: var(--card-bg);
+      background: linear-gradient(165deg, rgba(26, 14, 46, 0.90) 0%, rgba(16, 8, 30, 0.93) 100%);
       border-radius: 26px;
       padding: 36px 22px 42px;
       border: 1px solid var(--border-color);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.6),
-        0 0 35px var(--shadow-color),
-        inset 0 0 25px rgba(255, 255, 255, 0.04);
+        0 16px 40px rgba(0, 0, 0, 0.55),
+        0 0 28px var(--shadow-color),
+        inset 0 0 22px rgba(255, 255, 255, 0.04);
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -268,19 +331,24 @@
       position: relative;
       overflow: hidden;
       opacity: 0;
-      transform: translateY(45px) scale(0.92);
-      filter: blur(8px);
+      transform: translate3d(0, 40px, 0) scale(0.95);
       transition:
-        opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-        filter 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1s cubic-bezier(0.22, 1, 0.36, 1),
         background-color 0.8s ease,
         border-color 0.8s ease;
     }
+    /* En pantallas de escritorio sí activamos backdrop-filter, pero en móvil usamos el gradiente cristalino de alto rendimiento */
+    @media (min-width: 768px) {
+      .invitation-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+    }
     .invitation-card.card-awake {
       opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0);
+      transform: translate3d(0, 0, 0) scale(1);
     }
 
     /* Destello superior sutil dentro de la tarjeta */
@@ -289,48 +357,40 @@
       position: absolute;
       top: -80px; left: 50%; transform: translateX(-50%);
       width: 260px; height: 160px;
-      background: radial-gradient(circle, rgba(255, 153, 204, 0.25) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255, 153, 204, 0.22) 0%, transparent 70%);
       pointer-events: none;
     }
 
-    /* COREOGRAFÍA DE ENTRADA INICIAL AL ABRIR EL SOBRE (HERO STAGGER) */
+    /* COREOGRAFÍA DE ENTRADA INICIAL AL ABRIR EL SOBRE (100% GPU: OPACITY + TRANSLATE3D, SIN FILTER BLUR) */
     .hero-entrance-item {
       opacity: 0;
-      transform: translateY(28px) scale(0.94);
-      filter: blur(6px);
+      transform: translate3d(0, 24px, 0) scale(0.95);
       transition:
-        opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.95s cubic-bezier(0.22, 1, 0.36, 1),
-        filter 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .hero-entrance-item.hero-visible {
       opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0);
+      transform: translate3d(0, 0, 0) scale(1);
     }
 
-    /* EFECTOS SCROLL REVEAL (APARICIÓN SUAVE AL DESLIZAR) */
+    /* EFECTOS SCROLL REVEAL FLUIDOS A 120FPS (SIN FILTER BLUR PARA EVITAR TRABONES EN MÓVIL) */
     .scroll-reveal {
       opacity: 0;
-      transform: translateY(38px) scale(0.96);
-      filter: blur(4px);
+      transform: translate3d(0, 32px, 0) scale(0.97);
       transition:
-        opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-        filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: opacity, transform, filter;
+        opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .scroll-reveal.from-left { transform: translateX(-34px) translateY(20px) scale(0.96); }
-    .scroll-reveal.from-right { transform: translateX(34px) translateY(20px) scale(0.96); }
+    .scroll-reveal.from-left { transform: translate3d(-28px, 18px, 0) scale(0.97); }
+    .scroll-reveal.from-right { transform: translate3d(28px, 18px, 0) scale(0.97); }
     .scroll-reveal.is-visible {
       opacity: 1;
-      transform: translateX(0) translateY(0) scale(1);
-      filter: blur(0);
+      transform: translate3d(0, 0, 0) scale(1);
     }
 
     .butterfly-separator {
       width: 78px; height: 78px; margin: -6px auto 4px;
-      filter: drop-shadow(0 0 14px rgba(255, 153, 204, 0.8));
     }
     .header-subtitle {
       font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 5px;
@@ -341,25 +401,26 @@
       font-family: 'Great Vibes', cursive; font-size: 3.5rem;
       background: linear-gradient(135deg, #ffffff 0%, var(--butterfly-blue) 30%, var(--butterfly-pink) 68%, var(--butterfly-gold) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      line-height: 1.18; filter: drop-shadow(0 4px 12px rgba(176, 38, 255, 0.35));
+      line-height: 1.18;
     }
     
-    /* MARCO CON CORONA ORIGINAL Y HALO LUMINOSO */
+    /* MARCO CON CORONA ORIGINAL Y HALO LUMINOSO (SIN FILTER BLUR DINÁMICO) */
     .photo-frame-container {
       position: relative; width: 260px; height: 260px; margin: 18px auto 8px;
       flex-shrink: 0; display: flex; justify-content: center; align-items: center;
     }
     .photo-frame-container::before {
-      content: ''; position: absolute; width: 72%; height: 72%; border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 153, 204, 0.45), rgba(0, 245, 255, 0.2), transparent 70%);
-      filter: blur(14px); z-index: 0; animation: pulseHalo 3.5s infinite alternate ease-in-out;
+      content: ''; position: absolute; width: 88%; height: 88%; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 153, 204, 0.42) 0%, rgba(0, 245, 255, 0.18) 45%, transparent 70%);
+      z-index: 0; animation: pulseHalo 3.5s infinite alternate ease-in-out;
+      will-change: transform, opacity;
     }
     @keyframes pulseHalo {
       0% { transform: scale(0.95); opacity: 0.65; }
-      100% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1.06); opacity: 1; }
     }
     .the-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 2; pointer-events: none; }
-    .the-photo { position: absolute; width: 53%; height: 60%; top: 24%; left: 23.5%; object-fit: cover; border-radius: 50%; z-index: 1; box-shadow: 0 0 18px rgba(0,0,0,0.85); }
+    .the-photo { position: absolute; width: 53%; height: 60%; top: 24%; left: 23.5%; object-fit: cover; border-radius: 50%; z-index: 1; box-shadow: 0 0 16px rgba(0,0,0,0.85); }
 
     /* INDICADOR DE DESLIZAR (SCROLL CUE) */
     .scroll-hint {
@@ -375,8 +436,8 @@
       animation: bounceDown 1.8s infinite ease-in-out;
     }
     @keyframes bounceDown {
-      0%, 100% { transform: translateY(0); opacity: 0.5; }
-      50% { transform: translateY(6px); opacity: 1; }
+      0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.5; }
+      50% { transform: translate3d(0, 6px, 0); opacity: 1; }
     }
 
     /* DIVISOR ORNAMENTAL DE LUZ */
@@ -408,7 +469,7 @@
       border: 1px solid rgba(255, 224, 102, 0.32);
       border-radius: 20px;
       position: relative;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3), inset 0 0 18px rgba(255, 224, 102, 0.05);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
     }
     .family-block {
       display: flex;
@@ -437,7 +498,6 @@
       color: var(--butterfly-pink);
       line-height: 1;
       margin: 2px 0;
-      text-shadow: 0 0 8px rgba(255, 153, 204, 0.4);
     }
     .family-divider {
       width: 65%;
@@ -456,13 +516,7 @@
       border-radius: 18px;
       text-align: center;
       position: relative;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-      transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
-    }
-    .info-card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(255, 153, 204, 0.55);
-      box-shadow: 0 12px 28px rgba(176, 38, 255, 0.25);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
     }
     .card-badge-icon {
       width: 42px; height: 42px; margin: 0 auto 10px;
@@ -471,7 +525,6 @@
       border: 1px solid rgba(255, 224, 102, 0.35);
       display: flex; align-items: center; justify-content: center;
       font-size: 1.2rem;
-      box-shadow: 0 0 15px rgba(255, 224, 102, 0.2);
     }
     .info-card h3 {
       font-family: 'Cinzel', serif; color: var(--text-secondary);
@@ -492,11 +545,11 @@
       background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.35));
       border: 1px solid rgba(255, 224, 102, 0.35);
       border-radius: 14px; padding: 12px 8px; width: 72px; text-align: center;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 10px rgba(255, 224, 102, 0.08);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
     }
     .time-box span {
       display: block; font-size: 1.6rem; font-weight: 700;
-      color: var(--butterfly-gold); text-shadow: 0 0 12px rgba(255, 224, 102, 0.6);
+      color: var(--butterfly-gold); text-shadow: 0 0 10px rgba(255, 224, 102, 0.5);
     }
     .time-box p {
       font-size: 0.65rem; color: var(--text-main); margin-top: 5px;
@@ -518,7 +571,7 @@
       content: ''; position: absolute; left: -32px; top: 14px;
       width: 13px; height: 13px; border-radius: 50%;
       background: var(--butterfly-gold); border: 2px solid var(--bg-base);
-      box-shadow: 0 0 10px var(--butterfly-gold);
+      box-shadow: 0 0 8px var(--butterfly-gold);
     }
     .time-label { font-weight: 700; color: var(--butterfly-blue); font-size: 0.92rem; letter-spacing: 0.5px; }
     .event-desc { font-size: 0.86rem; color: var(--text-main); margin-top: 4px; font-weight: 300; }
@@ -546,48 +599,42 @@
     .qr-code {
       width: 136px; height: 136px; margin: 16px auto; border-radius: 14px;
       padding: 8px; background: white; display: block;
-      box-shadow: 0 0 20px rgba(255, 153, 204, 0.4);
+      box-shadow: 0 0 18px rgba(255, 153, 204, 0.35);
     }
     .btn-ig {
       display: inline-block; padding: 11px 24px;
       background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
       color: white; border-radius: 25px; text-decoration: none;
       font-size: 0.82rem; font-weight: bold; margin-top: 10px;
-      box-shadow: 0 0 18px rgba(204, 35, 102, 0.45); transition: transform 0.3s ease;
+      box-shadow: 0 0 16px rgba(204, 35, 102, 0.4);
     }
-    .btn-ig:hover { transform: scale(1.03); }
 
     /* BOTONES */
     .btn-view-info, .btn-rsvp-main {
       display: inline-block; padding: 11px 22px; background: var(--btn-bg); color: var(--btn-text);
       border: 1px solid var(--text-secondary); border-radius: 25px; text-decoration: none;
       font-size: 0.8rem; font-weight: 500; letter-spacing: 1.2px; cursor: pointer;
-      transition: all 0.3s ease; width: 100%;
-    }
-    .btn-view-info:hover {
-      background: rgba(153, 255, 255, 0.12);
-      box-shadow: 0 0 15px rgba(153, 255, 255, 0.3);
+      transition: transform 0.25s ease, background-color 0.25s ease; width: 100%;
     }
     .btn-rsvp-main {
       background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink), var(--butterfly-gold));
       color: #12091f; border: none; font-weight: 700; font-size: 0.88rem;
       padding: 14px 24px; margin-top: 6px;
-      box-shadow: 0 0 22px rgba(255, 153, 204, 0.6);
+      box-shadow: 0 0 20px rgba(255, 153, 204, 0.55);
     }
-    .btn-rsvp-main:hover { transform: translateY(-2px); box-shadow: 0 0 28px rgba(255, 224, 102, 0.8); }
 
     /* OVERLAYS (MAPA, RSVP, BANCO) */
     .overlay-window {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.85); z-index: 2000; display: flex;
+      background: rgba(5, 2, 12, 0.92); z-index: 2000; display: flex;
       justify-content: center; align-items: center; opacity: 0; visibility: hidden;
-      transition: opacity 0.5s ease; backdrop-filter: blur(6px);
+      transition: opacity 0.35s ease;
     }
     .overlay-window.active { opacity: 1; visibility: visible; }
     .overlay-container {
       width: 90%; max-width: 400px; background: #160b28;
       border: 1px solid var(--border-color); border-radius: 22px;
-      padding: 24px 20px; position: relative; box-shadow: 0 0 35px var(--shadow-color);
+      padding: 24px 20px; position: relative; box-shadow: 0 0 30px var(--shadow-color);
     }
     .btn-close-overlay {
       position: absolute; top: 15px; right: 15px; background: none;
@@ -626,9 +673,9 @@
     /* BOTÓN DE MÚSICA */
     .music-btn {
       position: fixed; bottom: 20px; right: 20px; width: 46px; height: 46px;
-      border-radius: 50%; background: rgba(20, 11, 35, 0.8); border: 1px solid var(--butterfly-gold);
+      border-radius: 50%; background: rgba(20, 11, 35, 0.9); border: 1px solid var(--butterfly-gold);
       color: var(--butterfly-gold); display: flex; justify-content: center; align-items: center;
-      font-size: 18px; z-index: 100; cursor: pointer; box-shadow: 0 0 18px rgba(255, 224, 102, 0.45);
+      font-size: 18px; z-index: 100; cursor: pointer; box-shadow: 0 0 15px rgba(255, 224, 102, 0.4);
     }
   </style>
 </head>
@@ -643,14 +690,13 @@
   <div class="bg-particles"></div>
   <div class="fireflies-layer" id="firefliesLayer"></div>
 
-  <!-- ENREDADERAS Y 15 MARIPOSAS FIELES A LA ILUSTRACIÓN (FRONTAL Y PERFIL) -->
+  <!-- ENREDADERAS Y MARIPOSAS ACELERADAS POR GPU (60/120 FPS EN IPHONE Y ANDROID) -->
   <div class="vines-container" id="vinesContainer">
     <div class="vine-edge vine-v vine-left"></div>
     <div class="vine-edge vine-v vine-right"></div>
     <div class="vine-edge vine-h vine-top"></div>
     <div class="vine-edge vine-h vine-bottom"></div>
 
-    <!-- 15 mariposas alternando vista de perfil (como la derecha de tu imagen) y vista abierta (como la izquierda de tu imagen) -->
     <div class="fly-container fly-1" data-pose="side-right" data-theme="pink" data-scale="1.0" data-speed="1.35s"></div>
     <div class="fly-container fly-2" data-pose="side-left" data-theme="cyan" data-scale="0.90" data-speed="1.28s"></div>
     <div class="fly-container fly-3" data-pose="front" data-theme="gold" data-scale="1.06" data-speed="1.50s"></div>
@@ -725,24 +771,24 @@
       <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: left;">
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BANCO:</strong></p>
         <!-- REEMPLAZA EL NOMBRE DEL BANCO A CONTINUACIÓN -->
-        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[Banorte]</p>
+        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE DEL BANCO]</p>
         
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BENEFICIARIO:</strong></p>
         <!-- REEMPLAZA EL NOMBRE DEL BENEFICIARIO A CONTINUACIÓN -->
-        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[Alejandro Rodolfo Camacho Peréz]</p>
+        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE COMPLETO DEL BENEFICIARIO]</p>
         
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>CUENTA CLABE:</strong></p>
         <!-- REEMPLAZA LOS NÚMEROS DE LA CLABE A CONTINUACIÓN -->
-        <p style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;"> 072180002844828488 </p>
+        <p style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;">000 000 0000000000 0</p>
       </div>
     </div>
   </div>
 
-  <!-- CONTENIDO DE LA INVITACIÓN CON ENTRADA ESCALONADA DESDE QUE SE ABRE EL SOBRE Y SCROLL REVEAL -->
+  <!-- CONTENIDO DE LA INVITACIÓN CON ENTRADA ESCALONADA Y SCROLL FLUIDO -->
   <div class="mobile-container">
     <div class="invitation-card" id="mainInvitationCard">
 
-      <!-- PORTADA PRINCIPAL (CADA ELEMENTO ENTRA CON EFECTO CASCADA AL ABRIR EL SOBRE) -->
+      <!-- PORTADA PRINCIPAL -->
       <div>
         <div class="butterfly-separator hero-entrance-item" id="headerButterfly"></div>
         <p class="header-subtitle hero-entrance-item">Mis XV Años</p>
@@ -786,7 +832,7 @@
         <div class="family-divider"></div>
 
         <div class="family-block">
-          <h4 class="family-role"> Mis Padrinos </h4>
+          <h4 class="family-role">🦋 Mis Padrinos de Velación 🦋</h4>
           <p class="family-name">Amado Casaos Medina</p>
           <span class="family-amp">&amp;</span>
           <p class="family-name">Verónica Meraz Rangel</p>
@@ -893,7 +939,7 @@
         <h3 style="font-family: 'Cinzel', serif; color: var(--butterfly-pink); font-size: 1.12rem;">¡Captura los momentos!</h3>
         <p style="font-size: 0.82rem; color: var(--text-main); margin-top: 8px;">Etiquétame en tus fotos y videos en mi <br><strong style="color: var(--butterfly-gold);">INSTAGRAM</strong></p>
         
-        <img id="qrImage" class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwww.instagram.com%2Fshelyssmin" alt="Código QR de Instagram">
+        <img id="qrImage" class="qr-code" loading="lazy" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwww.instagram.com%2Fshelyssmin" alt="Código QR de Instagram">
         
         <a href="https://www.instagram.com/shelyssmin?utm_source=qr&stkn=cGZraXhwamFudTM4" id="igLink" target="_blank" class="btn-ig">📸 SÍGUEME EN INSTAGRAM</a>
       </div>
@@ -921,150 +967,103 @@
     /// ========================================== ///
     const ENLACE_INSTAGRAM = "https://www.instagram.com/shelyssmin?utm_source=qr&stkn=cGZraXhwamFudTM4"; 
 
-    // Paletas de color fieles al estilo de la imagen de referencia (borde oscuro, sub-borde medio, celdas brillantes)
+    // Paletas de color fieles al estilo de la imagen de referencia
     const butterflyPalettes = {
-      pink:   { rim: '#3b0a28', mid: '#c43670', inner: '#ff5ca8', glow: 'bf-pink' },
-      cyan:   { rim: '#072a40', mid: '#1488ab', inner: '#66f7ff', glow: 'bf-cyan' },
-      gold:   { rim: '#3d1e05', mid: '#d47a1c', inner: '#ffe066', glow: 'bf-gold' },
-      violet: { rim: '#240840', mid: '#8325c4', inner: '#e29eff', glow: 'bf-violet' }
+      pink:   { rim: '#3b0a28', mid: '#c43670', inner: '#ff5ca8', halo: 'rgba(255, 92, 168, 0.28)' },
+      cyan:   { rim: '#072a40', mid: '#1488ab', inner: '#66f7ff', halo: 'rgba(0, 245, 255, 0.28)' },
+      gold:   { rim: '#3d1e05', mid: '#d47a1c', inner: '#ffe066', halo: 'rgba(255, 224, 102, 0.28)' },
+      violet: { rim: '#240840', mid: '#8325c4', inner: '#e29eff', halo: 'rgba(176, 38, 255, 0.28)' }
     };
 
-    // Función que construye las 2 vistas exactas de la imagen que enviaste:
-    // 1) Vista de Perfil ("side-right" / "side-left"): como la mariposa derecha de tu imagen, con 3 capas de celdas festoneadas y aleteo tipo ola suave.
-    // 2) Vista Abierta ("front"): como la mariposa izquierda de tu imagen, con alas simétricas festoneadas y aleteo fluido.
+    // Mariposas 100% aceleradas por GPU (usan clases CSS @keyframes en el compositor gráfico del teléfono
+    // en lugar de etiquetas <animateTransform> SMIL y sin filter: drop-shadow que congelan Safari iOS al deslizar)
     function buildIllustratedButterflySVG(pose, themeName, dur) {
       const pal = butterflyPalettes[themeName] || butterflyPalettes.pink;
 
       if (pose === 'side-right' || pose === 'side-left') {
-        // La vista de perfil base mira hacia la derecha (igual que la mariposa derecha de tu imagen)
-        // Si es 'side-left', la espejamos limpiamente
         const mirror = pose === 'side-left' ? 'transform="translate(150,0) scale(-1,1)"' : '';
 
-        return `<svg class="svg-butterfly ${pal.glow}" viewBox="0 0 150 140">
+        return `<svg class="svg-butterfly" style="--bf-dur:${dur};" viewBox="0 0 150 140">
           <g ${mirror}>
-            <!-- Vaivén vertical suave del cuerpo en vuelo -->
-            <animateTransform attributeName="transform" type="translate" additive="sum" dur="${dur}" repeatCount="indefinite"
-              values="0,0; 0,-3.5; 0,2; 0,0"/>
+            <g class="wing-gpu-bob">
+              <!-- Halo ligero nativo en SVG (cero costo de filtro en móvil) -->
+              <circle cx="88" cy="72" r="46" fill="${pal.halo}" />
 
-            <!-- ALA EN SEGUNDO PLANO (ligeramente asomada detrás para dar volumen y onda desfasada) -->
-            <g transform="translate(-4, -3)" opacity="0.55">
-              <animateTransform attributeName="transform" type="rotate" additive="sum" dur="${dur}" repeatCount="indefinite"
-                calcMode="spline" keyTimes="0;0.5;1" keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
-                values="-8 98 92; 14 98 92; -8 98 92"/>
-              <path d="M 96,92 C 126,64 132,12 98,10 C 66,8 56,52 78,86 Z" fill="${pal.rim}"/>
-              <path d="M 95,89 C 118,64 122,22 96,20 C 74,18 68,52 82,84 Z" fill="${pal.mid}"/>
-              <path d="M 94,86 C 110,66 112,34 94,32 C 80,30 76,56 86,82 Z" fill="${pal.inner}"/>
-            </g>
+              <!-- ALA EN SEGUNDO PLANO -->
+              <g class="wing-gpu-back" opacity="0.55">
+                <path d="M 96,92 C 126,64 132,12 98,10 C 66,8 56,52 78,86 Z" fill="${pal.rim}"/>
+                <path d="M 95,89 C 118,64 122,22 96,20 C 74,18 68,52 82,84 Z" fill="${pal.mid}"/>
+                <path d="M 94,86 C 110,66 112,34 94,32 C 80,30 76,56 86,82 Z" fill="${pal.inner}"/>
+              </g>
 
-            <!-- ALA SUPERIOR PRINCIPAL DE PERFIL (con efecto de ola suave desde la base) -->
-            <g>
-              <animateTransform attributeName="transform" type="rotate" dur="${dur}" repeatCount="indefinite"
-                calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0.05 0.55 0.95; 0.45 0.05 0.55 0.95"
-                values="-12 98 92; 12 98 92; -12 98 92"/>
-              <g>
-                <animateTransform attributeName="transform" type="skewX" additive="sum" dur="${dur}" repeatCount="indefinite"
-                  calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0.05 0.55 0.95; 0.45 0.05 0.55 0.95"
-                  values="-6; 7; -6"/>
-                <!-- Borde exterior oscuro -->
+              <!-- ALA SUPERIOR PRINCIPAL DE PERFIL -->
+              <g class="wing-gpu-fore">
                 <path d="M 98,92 C 128,64 134,12 98,10 C 64,8 54,52 78,88 Z" fill="${pal.rim}"/>
-                <!-- Celdas festoneadas tono medio (5 arcos como en tu imagen) -->
                 <path d="M 96,89 C 118,64 124,22 104,16 C 94,14 86,22 86,26 C 78,22 70,30 72,40 C 64,40 60,50 66,58 C 60,62 62,72 70,76 C 68,82 76,88 86,88 Z"
                   fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2" stroke-linejoin="round"/>
-                <!-- Celdas festoneadas interiores tono brillante -->
                 <path d="M 95,86 C 112,66 116,32 100,26 C 92,24 86,30 86,36 C 78,34 74,42 76,50 C 70,52 68,60 74,66 C 72,72 78,80 88,84 Z"
                   fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.8" stroke-linejoin="round"/>
-                <!-- Nervaduras radiales internas que dividen los pétalos del ala -->
                 <path d="M 96,88 C 98,64 100,38 102,16 M 94,86 C 88,64 82,44 72,40 M 92,84 C 82,68 74,58 66,58 M 90,84 C 80,76 74,74 70,76"
                   fill="none" stroke="${pal.rim}" stroke-width="1.8" stroke-linecap="round"/>
               </g>
-            </g>
 
-            <!-- ALA INFERIOR DE PERFIL (hacia la izquierda/abajo, con onda desfasada para efecto ola) -->
-            <g>
-              <animateTransform attributeName="transform" type="rotate" dur="${dur}" repeatCount="indefinite"
-                calcMode="spline" keyTimes="0;0.3;0.65;1" keySplines="0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1"
-                values="8 92 94; -14 92 94; 10 92 94; 8 92 94"/>
-              <!-- Borde exterior oscuro -->
-              <path d="M 94,92 C 74,66 26,64 16,88 C 8,110 48,124 88,100 Z" fill="${pal.rim}"/>
-              <!-- Celdas festoneadas tono medio -->
-              <path d="M 90,92 C 72,72 34,70 24,88 C 20,96 28,104 36,102 C 36,110 48,114 58,108 C 64,112 76,108 86,98 Z"
-                fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2" stroke-linejoin="round"/>
-              <!-- Celdas interiores tono brillante -->
-              <path d="M 88,92 C 72,78 44,76 36,88 C 34,94 40,98 46,96 C 48,102 58,104 66,100 C 72,102 80,98 86,94 Z"
-                fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7" stroke-linejoin="round"/>
-              <!-- Nervaduras radiales del ala inferior -->
-              <path d="M 88,93 C 66,86 44,86 24,88 M 86,95 C 66,96 48,100 36,102 M 84,96 C 70,102 62,106 58,108"
-                fill="none" stroke="${pal.rim}" stroke-width="1.7" stroke-linecap="round"/>
-            </g>
+              <!-- ALA INFERIOR DE PERFIL -->
+              <g class="wing-gpu-hind">
+                <path d="M 94,92 C 74,66 26,64 16,88 C 8,110 48,124 88,100 Z" fill="${pal.rim}"/>
+                <path d="M 90,92 C 72,72 34,70 24,88 C 20,96 28,104 36,102 C 36,110 48,114 58,108 C 64,112 76,108 86,98 Z"
+                  fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M 88,92 C 72,78 44,76 36,88 C 34,94 40,98 46,96 C 48,102 58,104 66,100 C 72,102 80,98 86,94 Z"
+                  fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7" stroke-linejoin="round"/>
+                <path d="M 88,93 C 66,86 44,86 24,88 M 86,95 C 66,96 48,100 36,102 M 84,96 C 70,102 62,106 58,108"
+                  fill="none" stroke="${pal.rim}" stroke-width="1.7" stroke-linecap="round"/>
+              </g>
 
-            <!-- CUERPO CURVO DE PERFIL Y ANTENAS (idéntico a la derecha de tu imagen) -->
-            <path d="M 60,122 C 80,112 100,98 114,80 C 118,75 112,70 106,75 C 92,90 74,104 56,116 C 52,119 55,124 60,122 Z" fill="${pal.rim}"/>
-            <circle cx="115" cy="75" r="5" fill="${pal.rim}"/>
-            <path d="M 118,73 C 130,64 138,50 135,36" fill="none" stroke="${pal.rim}" stroke-width="2" stroke-linecap="round"/>
-            <path d="M 116,71 C 126,60 132,46 128,34" fill="none" stroke="${pal.rim}" stroke-width="1.7" stroke-linecap="round"/>
+              <!-- CUERPO CURVO DE PERFIL Y ANTENAS -->
+              <path d="M 60,122 C 80,112 100,98 114,80 C 118,75 112,70 106,75 C 92,90 74,104 56,116 C 52,119 55,124 60,122 Z" fill="${pal.rim}"/>
+              <circle cx="115" cy="75" r="5" fill="${pal.rim}"/>
+              <path d="M 118,73 C 130,64 138,50 135,36" fill="none" stroke="${pal.rim}" stroke-width="2" stroke-linecap="round"/>
+              <path d="M 116,71 C 126,60 132,46 128,34" fill="none" stroke="${pal.rim}" stroke-width="1.7" stroke-linecap="round"/>
+            </g>
           </g>
         </svg>`;
       }
 
-      // VISTA FRONTAL ABIERTA (idéntica a la mariposa izquierda de tu imagen, con aleteo en ola suave)
-      return `<svg class="svg-butterfly ${pal.glow}" viewBox="0 0 160 140">
-        <g>
-          <animateTransform attributeName="transform" type="translate" dur="${dur}" repeatCount="indefinite"
-            values="0,0; 0,-3; 0,2; 0,0"/>
+      // VISTA FRONTAL ABIERTA ACELERADA POR GPU
+      return `<svg class="svg-butterfly" style="--bf-dur:${dur};" viewBox="0 0 160 140">
+        <g class="wing-gpu-bob">
+          <circle cx="80" cy="70" r="48" fill="${pal.halo}" />
 
-          <!-- MITAD IZQUIERDA (Ala superior + Ala inferior festoneadas) -->
-          <g>
-            <animateTransform attributeName="transform" type="translate" dur="${dur}" repeatCount="indefinite"
-              values="0,0; 8,0; 0,0"/>
-            <g transform="translate(80,70)">
-              <animateTransform attributeName="transform" type="scale" additive="sum" dur="${dur}" repeatCount="indefinite"
-                calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0.05 0.55 0.95; 0.45 0.05 0.55 0.95"
-                values="1,1; 0.52,0.96; 1,1"/>
-              <g transform="translate(-80,-70)">
-                <!-- Ala Inferior Izquierda -->
-                <path d="M 78,72 C 42,74 28,118 46,130 C 64,138 76,112 78,80 Z" fill="${pal.rim}"/>
-                <path d="M 76,74 C 48,76 36,112 50,122 C 62,128 74,108 76,80 Z" fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2"/>
-                <path d="M 75,75 C 54,78 44,104 54,112 C 64,118 72,102 75,80 Z" fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7"/>
-                <path d="M 76,76 C 60,92 50,108 46,120 M 76,78 C 66,98 60,112 58,124" fill="none" stroke="${pal.rim}" stroke-width="1.6"/>
+          <!-- MITAD IZQUIERDA -->
+          <g class="wing-gpu-front-l">
+            <path d="M 78,72 C 42,74 28,118 46,130 C 64,138 76,112 78,80 Z" fill="${pal.rim}"/>
+            <path d="M 76,74 C 48,76 36,112 50,122 C 62,128 74,108 76,80 Z" fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2"/>
+            <path d="M 75,75 C 54,78 44,104 54,112 C 64,118 72,102 75,80 Z" fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7"/>
+            <path d="M 76,76 C 60,92 50,108 46,120 M 76,78 C 66,98 60,112 58,124" fill="none" stroke="${pal.rim}" stroke-width="1.6"/>
 
-                <!-- Ala Superior Izquierda -->
-                <path d="M 78,66 C 62,22 14,8 8,36 C 4,62 36,78 78,72 Z" fill="${pal.rim}"/>
-                <path d="M 76,66 C 62,28 22,16 16,38 C 14,46 22,52 28,52 C 22,58 28,66 38,66 C 38,72 52,74 76,70 Z"
-                  fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M 75,66 C 62,36 32,26 26,42 C 24,48 32,52 38,52 C 34,58 40,64 48,64 C 50,68 60,70 75,68 Z"
-                  fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7" stroke-linejoin="round"/>
-                <path d="M 76,66 C 54,48 34,36 16,38 M 76,67 C 54,56 38,54 28,52 M 76,68 C 58,64 46,64 38,66"
-                  fill="none" stroke="${pal.rim}" stroke-width="1.6" stroke-linecap="round"/>
-              </g>
-            </g>
+            <path d="M 78,66 C 62,22 14,8 8,36 C 4,62 36,78 78,72 Z" fill="${pal.rim}"/>
+            <path d="M 76,66 C 62,28 22,16 16,38 C 14,46 22,52 28,52 C 22,58 28,66 38,66 C 38,72 52,74 76,70 Z"
+              fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M 75,66 C 62,36 32,26 26,42 C 24,48 32,52 38,52 C 34,58 40,64 48,64 C 50,68 60,70 75,68 Z"
+              fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M 76,66 C 54,48 34,36 16,38 M 76,67 C 54,56 38,54 28,52 M 76,68 C 58,64 46,64 38,66"
+              fill="none" stroke="${pal.rim}" stroke-width="1.6" stroke-linecap="round"/>
           </g>
 
-          <!-- MITAD DERECHA (Espejo exacto con el mismo ritmo de onda) -->
-          <g transform="translate(160,0) scale(-1,1)">
-            <g>
-              <animateTransform attributeName="transform" type="translate" dur="${dur}" repeatCount="indefinite"
-                values="0,0; 8,0; 0,0"/>
-              <g transform="translate(80,70)">
-                <animateTransform attributeName="transform" type="scale" additive="sum" dur="${dur}" repeatCount="indefinite"
-                  calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0.05 0.55 0.95; 0.45 0.05 0.55 0.95"
-                  values="1,1; 0.52,0.96; 1,1"/>
-                <g transform="translate(-80,-70)">
-                  <!-- Ala Inferior Derecha -->
-                  <path d="M 78,72 C 42,74 28,118 46,130 C 64,138 76,112 78,80 Z" fill="${pal.rim}"/>
-                  <path d="M 76,74 C 48,76 36,112 50,122 C 62,128 74,108 76,80 Z" fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2"/>
-                  <path d="M 75,75 C 54,78 44,104 54,112 C 64,118 72,102 75,80 Z" fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7"/>
-                  <path d="M 76,76 C 60,92 50,108 46,120 M 76,78 C 66,98 60,112 58,124" fill="none" stroke="${pal.rim}" stroke-width="1.6"/>
+          <!-- MITAD DERECHA -->
+          <g class="wing-gpu-front-r">
+            <g transform="translate(160,0) scale(-1,1)">
+              <path d="M 78,72 C 42,74 28,118 46,130 C 64,138 76,112 78,80 Z" fill="${pal.rim}"/>
+              <path d="M 76,74 C 48,76 36,112 50,122 C 62,128 74,108 76,80 Z" fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2"/>
+              <path d="M 75,75 C 54,78 44,104 54,112 C 64,118 72,102 75,80 Z" fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7"/>
+              <path d="M 76,76 C 60,92 50,108 46,120 M 76,78 C 66,98 60,112 58,124" fill="none" stroke="${pal.rim}" stroke-width="1.6"/>
 
-                  <!-- Ala Superior Derecha -->
-                  <path d="M 78,66 C 62,22 14,8 8,36 C 4,62 36,78 78,72 Z" fill="${pal.rim}"/>
-                  <path d="M 76,66 C 62,28 22,16 16,38 C 14,46 22,52 28,52 C 22,58 28,66 38,66 C 38,72 52,74 76,70 Z"
-                    fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2" stroke-linejoin="round"/>
-                  <path d="M 75,66 C 62,36 32,26 26,42 C 24,48 32,52 38,52 C 34,58 40,64 48,64 C 50,68 60,70 75,68 Z"
-                    fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7" stroke-linejoin="round"/>
-                  <path d="M 76,66 C 54,48 34,36 16,38 M 76,67 C 54,56 38,54 28,52 M 76,68 C 58,64 46,64 38,66"
-                    fill="none" stroke="${pal.rim}" stroke-width="1.6" stroke-linecap="round"/>
-                </g>
-              </g>
+              <path d="M 78,66 C 62,22 14,8 8,36 C 4,62 36,78 78,72 Z" fill="${pal.rim}"/>
+              <path d="M 76,66 C 62,28 22,16 16,38 C 14,46 22,52 28,52 C 22,58 28,66 38,66 C 38,72 52,74 76,70 Z"
+                fill="${pal.mid}" stroke="${pal.rim}" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M 75,66 C 62,36 32,26 26,42 C 24,48 32,52 38,52 C 34,58 40,64 48,64 C 50,68 60,70 75,68 Z"
+                fill="${pal.inner}" stroke="${pal.rim}" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M 76,66 C 54,48 34,36 16,38 M 76,67 C 54,56 38,54 28,52 M 76,68 C 58,64 46,64 38,66"
+                fill="none" stroke="${pal.rim}" stroke-width="1.6" stroke-linecap="round"/>
             </g>
           </g>
 
@@ -1078,7 +1077,7 @@
       </svg>`;
     }
 
-    // Inicializar las 15 mariposas del jardín
+    // Inicializar las mariposas del jardín
     document.querySelectorAll('.fly-container').forEach(container => {
       const pose = container.dataset.pose || 'side-right';
       const theme = container.dataset.theme || 'pink';
@@ -1091,43 +1090,53 @@
     document.getElementById('sealButterfly').innerHTML = buildIllustratedButterflySVG('front', 'pink', '1.45s');
     document.getElementById('headerButterfly').innerHTML = buildIllustratedButterflySVG('side-right', 'pink', '1.40s');
 
-    // Crear luciérnagas mágicas flotantes en el fondo
+    // Crear luciérnagas mágicas flotantes ligeras (con gradiente radial nativo, sin box-shadow costoso)
     const firefliesLayer = document.getElementById('firefliesLayer');
     const ffColors = ['#ffe066', '#99ffff', '#ff99cc', '#39ff14'];
-    for (let i = 0; i < 18; i++) {
+    const ffCount = window.innerWidth < 600 ? 10 : 16;
+    for (let i = 0; i < ffCount; i++) {
       const dot = document.createElement('div');
       dot.className = 'firefly';
-      const size = (Math.random() * 4 + 2.5).toFixed(1) + 'px';
+      const size = (Math.random() * 6 + 6).toFixed(1) + 'px';
       const color = ffColors[i % ffColors.length];
       dot.style.width = size;
       dot.style.height = size;
-      dot.style.left = (Math.random() * 94 + 3) + '%';
-      dot.style.top = (Math.random() * 94 + 3) + '%';
-      dot.style.background = color;
-      dot.style.boxShadow = `0 0 10px ${color}, 0 0 18px ${color}`;
+      dot.style.left = (Math.random() * 92 + 4) + '%';
+      dot.style.top = (Math.random() * 92 + 4) + '%';
+      dot.style.background = `radial-gradient(circle, #ffffff 0%, ${color} 45%, transparent 75%)`;
       dot.style.setProperty('--ff-dur', (Math.random() * 8 + 7).toFixed(1) + 's');
-      dot.style.setProperty('--ff-x', ((Math.random() - 0.5) * 80).toFixed(0) + 'px');
-      dot.style.setProperty('--ff-y', ((Math.random() - 0.5) * 80).toFixed(0) + 'px');
+      dot.style.setProperty('--ff-x', ((Math.random() - 0.5) * 70).toFixed(0) + 'px');
+      dot.style.setProperty('--ff-y', ((Math.random() - 0.5) * 70).toFixed(0) + 'px');
       firefliesLayer.appendChild(dot);
     }
 
-    // Efecto Scroll Reveal con IntersectionObserver y Barra de Progreso
+    // Efecto Scroll Reveal con IntersectionObserver (deja de observar una vez que aparece para ahorrar recursos)
     const revealElements = document.querySelectorAll('.scroll-reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
+    const revealObserver = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.14, rootMargin: '0px 0px -30px 0px' });
+    }, { threshold: 0.12, rootMargin: '0px 0px -20px 0px' });
 
     revealElements.forEach(el => revealObserver.observe(el));
 
+    // Barra de progreso sincronizada con requestAnimationFrame y transform: scaleX (cero reflow al deslizar)
+    let scrollTicking = false;
+    const progressBar = document.getElementById('scrollProgressBar');
     window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      document.getElementById('scrollProgressBar').style.width = pct + '%';
+      if (!scrollTicking) {
+        window.requestAnimationFrame(() => {
+          const scrollTop = window.scrollY || document.documentElement.scrollTop;
+          const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const ratio = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
+          progressBar.style.transform = `scaleX(${ratio})`;
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
     }, { passive: true });
 
     // Ruta de los archivos en tu repositorio (foto_shelani.jpeg, image_ffdf38.png, musica.mp3)
@@ -1169,10 +1178,6 @@
 
     let isOpened = false;
 
-    // Secuencia cinematográfica al abrir el sobre:
-    // 1) Se abre la solapa y sale una lluvia de chispas doradas y mariposas.
-    // 2) Un destello suave ilumina la transición.
-    // 3) La tarjeta emerge con elegancia y cada elemento de la portada (mariposa, "Mis XV Años", "Shelani Esmeralda", marco con foto) aparece en cascada uno por uno.
     function startOpeningSequence() {
       if (isOpened) return;
       isOpened = true;
@@ -1180,10 +1185,10 @@
       document.getElementById('envelopeWrapper').classList.add('open');
       document.getElementById('bg-music').play().catch(e => console.log("Audio prevenido"));
 
-      // Ráfaga de mariposas y polvo de hadas dorado
+      // Ráfaga de mariposas y polvo de hadas dorado (cantidad optimizada para fluidez total en móviles)
       setTimeout(() => {
-        for (let i = 0; i < 22; i++) setTimeout(createButterflyBurst, i * 60);
-        for (let j = 0; j < 28; j++) setTimeout(createSparkleBurst, j * 35);
+        for (let i = 0; i < 14; i++) setTimeout(createButterflyBurst, i * 70);
+        for (let j = 0; j < 18; j++) setTimeout(createSparkleBurst, j * 45);
       }, 280);
 
       // Destello mágico suave al centro
@@ -1200,7 +1205,7 @@
         heroItems.forEach((item, idx) => {
           setTimeout(() => {
             item.classList.add('hero-visible');
-          }, 180 + idx * 190);
+          }, 160 + idx * 170);
         });
       }, 1350);
 
@@ -1219,11 +1224,11 @@
       butterfly.innerHTML = buildIllustratedButterflySVG(pose, theme, '1.05s');
       butterfly.style.left = '50%';
       butterfly.style.top = '50%';
-      butterfly.style.setProperty('--x', (Math.random() - 0.5) * 660 + 'px');
-      butterfly.style.setProperty('--y', (Math.random() * -440 - 130) + 'px');
+      butterfly.style.setProperty('--x', (Math.random() - 0.5) * 600 + 'px');
+      butterfly.style.setProperty('--y', (Math.random() * -420 - 120) + 'px');
       butterfly.style.setProperty('--rot', (Math.random() - 0.5) * 90 + 'deg');
       document.body.appendChild(butterfly);
-      setTimeout(() => { butterfly.remove(); }, 3500);
+      setTimeout(() => { butterfly.remove(); }, 3200);
     }
 
     function createSparkleBurst() {
@@ -1231,10 +1236,10 @@
       sp.className = 'sparkle-particle';
       sp.style.left = '50%';
       sp.style.top = '50%';
-      sp.style.setProperty('--sx', (Math.random() - 0.5) * 580 + 'px');
-      sp.style.setProperty('--sy', (Math.random() - 0.5) * 580 + 'px');
+      sp.style.setProperty('--sx', (Math.random() - 0.5) * 520 + 'px');
+      sp.style.setProperty('--sy', (Math.random() - 0.5) * 520 + 'px');
       document.body.appendChild(sp);
-      setTimeout(() => { sp.remove(); }, 2400);
+      setTimeout(() => { sp.remove(); }, 2200);
     }
 
     /* CONTROL DE OVERLAYS */
