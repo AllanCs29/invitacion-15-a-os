@@ -590,6 +590,25 @@
       border-radius: 50%; border: 1px solid var(--border-color); flex-shrink: 0;
     }
 
+    /* INSTAGRAM Y QR */
+    .ig-section {
+      background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(176, 38, 255, 0.1));
+      border-radius: 18px; padding: 26px 20px; text-align: center;
+      border: 1px dashed var(--butterfly-pink); margin-top: 6px;
+    }
+    .qr-code {
+      width: 136px; height: 136px; margin: 16px auto; border-radius: 14px;
+      padding: 8px; background: white; display: block;
+      box-shadow: 0 0 18px rgba(255, 153, 204, 0.35);
+    }
+    .btn-ig {
+      display: inline-block; padding: 11px 24px;
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: white; border-radius: 25px; text-decoration: none;
+      font-size: 0.82rem; font-weight: bold; margin-top: 10px;
+      box-shadow: 0 0 16px rgba(204, 35, 102, 0.4);
+    }
+
     /* BOTONES */
     .btn-view-info, .btn-rsvp-main {
       display: inline-block; padding: 11px 22px; background: var(--btn-bg); color: var(--btn-text);
@@ -914,6 +933,16 @@
         <p style="margin-top: 15px; margin-bottom: 15px; font-weight: 500; color: var(--text-main);">Por si no encuentras el regalo indicado existe la siguiente opcion :D   :</p>
         <button class="btn-view-info" onclick="openBank()">💳 DATOS PARA TRANSFERENCIA</button>
       </div>
+
+      <!-- SECCIÓN INSTAGRAM Y CÓDIGO QR -->
+      <div class="ig-section scroll-reveal">
+        <h3 style="font-family: 'Cinzel', serif; color: var(--butterfly-pink); font-size: 1.12rem;">¡Captura los momentos!</h3>
+        <p style="font-size: 0.82rem; color: var(--text-main); margin-top: 8px;">Etiquétame en tus fotos y videos en mi <br><strong style="color: var(--butterfly-gold);">INSTAGRAM</strong></p>
+        
+        <img id="qrImage" class="qr-code" loading="lazy" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwww.instagram.com%2Fshelyssmin" alt="Código QR de Instagram">
+        
+        <a href="https://www.instagram.com/shelyssmin?utm_source=qr&stkn=cGZraXhwamFudTM4" id="igLink" target="_blank" class="btn-ig">📸 SÍGUEME EN INSTAGRAM</a>
+      </div>
       
       <!-- CONFIRMACIÓN DE ASISTENCIA Y CIERRE -->
       <div class="scroll-reveal">
@@ -935,6 +964,11 @@
     /// Solo pega abajo la URL "/exec" que te da Extensiones > Apps Script:       ///
     /// ========================================================================= ///
     const GOOGLE_SHEETS_WEBAPP_URL = "PEGA_AQUI_TU_URL_DE_GOOGLE_SCRIPT";
+
+    /// ========================================== ///
+    /// 2. PON AQUÍ EL ENLACE DEL INSTAGRAM DE ELLA ///
+    /// ========================================== ///
+    const ENLACE_INSTAGRAM = "https://www.instagram.com/shelyssmin?utm_source=qr&stkn=cGZraXhwamFudTM4"; 
 
     // Paletas de color fieles al estilo de la imagen de referencia
     const butterflyPalettes = {
@@ -1118,6 +1152,10 @@
     frameEl.onerror = () => { frameEl.src = "image_ffdf38.png"; };
     musicEl.src = REPO_BASE + "musica.mp3";
     musicEl.onerror = () => { musicEl.src = "musica.mp3"; };
+
+    // Configuración Automática de Instagram y QR
+    document.getElementById('igLink').href = ENLACE_INSTAGRAM;
+    document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ENLACE_INSTAGRAM)}`;
 
     // Lógica de Cuenta Regresiva (Apunta al 5 Dic 2026 - 6:00 PM)
     const fechaEvento = new Date("December 5, 2026 18:00:00").getTime();
