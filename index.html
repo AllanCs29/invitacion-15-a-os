@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mis 15 Años - Shelani Esmeralda</title>
+  <meta name="description" content="Con la bendición de Dios y el amor de mi familia, te invito a celebrar mis XV años este Sábado 5 de Diciembre de 2026.">
+
+  <!-- TARJETA DE VISTA PREVIA PARA WHATSAPP Y REDES SOCIALES (OPEN GRAPH) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mis XV Años - Shelani Esmeralda">
+  <meta property="og:title" content="✨ Mis XV Años - Shelani Esmeralda ✨">
+  <meta property="og:description" content="Con la bendición de Dios y el amor de mi familia, te invito a celebrar mis 15 años este Sábado 5 de Diciembre de 2026. ¡Toca para abrir tu invitación!">
+  <meta property="og:image" content="https://allancs29.github.io/invitacion-15-a-os/foto_shelani.jpeg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="800">
+  <meta property="og:url" content="https://allancs29.github.io/invitacion-15-a-os/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="✨ Mis XV Años - Shelani Esmeralda ✨">
+  <meta name="twitter:description" content="Te invito a celebrar mis XV años este Sábado 5 de Diciembre de 2026.">
+  <meta name="twitter:image" content="https://allancs29.github.io/invitacion-15-a-os/foto_shelani.jpeg">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -590,52 +606,23 @@
       border-radius: 50%; border: 1px solid var(--border-color); flex-shrink: 0;
     }
 
-    /* DETALLES DE TRANSFERENCIA: estilo exclusivo del cuadro bancario */
-    .bank-heading-icon {
-      display: flex; align-items: center; justify-content: center;
-      width: 48px; height: 48px; margin: 0 auto 12px;
-      border-radius: 50%; color: var(--butterfly-gold); font-size: 1.45rem;
-      background: linear-gradient(145deg, rgba(255,224,102,0.14), rgba(255,153,204,0.12));
-      border: 1px solid rgba(255,224,102,0.4);
-      box-shadow: 0 0 18px rgba(255,224,102,0.12);
+    /* INSTAGRAM Y QR */
+    .ig-section {
+      background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(176, 38, 255, 0.1));
+      border-radius: 18px; padding: 26px 20px; text-align: center;
+      border: 1px dashed var(--butterfly-pink); margin-top: 6px;
     }
-    .bank-details-card {
-      background: linear-gradient(150deg, rgba(255,255,255,0.07), rgba(176,38,255,0.09));
-      border: 1px solid rgba(255,224,102,0.38); border-radius: 17px;
-      padding: 19px 17px; margin-top: 20px; text-align: left;
-      box-shadow: inset 0 1px rgba(255,255,255,0.07);
+    .qr-code {
+      width: 136px; height: 136px; margin: 16px auto; border-radius: 14px;
+      padding: 8px; background: white; display: block;
+      box-shadow: 0 0 18px rgba(255, 153, 204, 0.35);
     }
-    .bank-detail + .bank-detail {
-      margin-top: 15px; padding-top: 15px;
-      border-top: 1px solid rgba(255,255,255,0.12);
-    }
-    .bank-detail-label {
-      display: block; margin-bottom: 6px;
-      font-family: 'Cinzel', serif; font-size: 0.72rem;
-      letter-spacing: 1.4px; color: var(--butterfly-gold);
-    }
-    .bank-detail-value {
-      font-size: 0.94rem; line-height: 1.55; color: #fff;
-      font-weight: 500; overflow-wrap: anywhere;
-    }
-    .bank-clabe {
-      font-size: clamp(0.92rem, 4vw, 1.1rem);
-      letter-spacing: 0.35px; font-weight: 700;
-      font-variant-numeric: tabular-nums; color: var(--butterfly-blue);
-    }
-    .bank-copy-btn {
-      display: flex; justify-content: center; align-items: center;
-      width: 100%; margin-top: 14px; padding: 12px 14px;
-      background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink), var(--butterfly-gold));
-      color: #12091f; border: 0; border-radius: 24px;
-      font: 700 0.81rem 'Montserrat', sans-serif; cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-    .bank-copy-btn:active { transform: scale(0.98); }
-    .bank-copy-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-    .bank-copy-feedback {
-      min-height: 1.25rem; margin-top: 9px; color: var(--butterfly-blue);
-      font-size: 0.74rem; text-align: center;
+    .btn-ig {
+      display: inline-block; padding: 11px 24px;
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: white; border-radius: 25px; text-decoration: none;
+      font-size: 0.82rem; font-weight: bold; margin-top: 10px;
+      box-shadow: 0 0 16px rgba(204, 35, 102, 0.4);
     }
 
     /* BOTONES */
@@ -686,6 +673,21 @@
     }
     .btn-submit-rsvp:disabled { opacity: 0.6; cursor: wait; }
 
+    .btn-copy-clabe {
+      margin-top: 14px; width: 100%; padding: 11px 16px;
+      background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink));
+      color: #12091f; border: none; border-radius: 25px;
+      font-family: 'Montserrat', sans-serif; font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 1px; cursor: pointer;
+      box-shadow: 0 0 15px rgba(153, 255, 255, 0.35);
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+    .btn-copy-clabe:active { transform: scale(0.97); }
+    .btn-copy-clabe.copied {
+      background: linear-gradient(135deg, #39ff14, #00f5ff);
+      color: #091a0d;
+    }
+
     .rsvp-status-msg {
       display: none; margin-top: 12px; padding: 12px;
       border-radius: 10px; font-size: 0.85rem; text-align: center; line-height: 1.4;
@@ -697,6 +699,105 @@
     .rsvp-status-msg.error {
       display: block; background: rgba(255, 0, 127, 0.15);
       border: 1px solid #ff007f; color: #ffb3d9;
+    }
+
+    .venue-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.84rem;
+      color: var(--butterfly-gold);
+      letter-spacing: 1px;
+      margin: 4px 0 8px;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(255, 224, 102, 0.3);
+    }
+    .event-datetime {
+      font-size: 0.88rem;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      line-height: 1.6;
+      opacity: 0.92;
+    }
+    .bank-card-visual {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.07) 0%, rgba(176, 38, 255, 0.12) 100%);
+      border: 1px solid rgba(255, 224, 102, 0.4);
+      border-radius: 18px;
+      padding: 20px 18px;
+      margin-top: 18px;
+      text-align: left;
+      box-shadow: inset 0 0 18px rgba(255, 224, 102, 0.06), 0 8px 24px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .bank-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .bank-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--butterfly-gold);
+      letter-spacing: 2px;
+    }
+    .bank-chip {
+      width: 32px;
+      height: 24px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #ffe066, #d49b27);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      opacity: 0.9;
+    }
+    .bank-field-label {
+      font-size: 0.72rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--butterfly-blue);
+      margin-bottom: 3px;
+    }
+    .bank-field-value {
+      font-size: 0.96rem;
+      font-weight: 500;
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
+    .bank-clabe-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px dashed rgba(255, 224, 102, 0.5);
+      border-radius: 12px;
+      padding: 10px 12px;
+      text-align: center;
+      font-size: 1.04rem;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      color: var(--butterfly-gold);
+      margin-top: 4px;
+    }
+    .closing-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding-top: 4px;
+    }
+    .closing-butterfly {
+      width: 56px;
+      height: 56px;
+      margin: 4px auto -2px;
+    }
+    .closing-date-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 4px;
+      color: var(--butterfly-blue);
+      padding: 6px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(153, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.03);
+      margin-top: 2px;
     }
 
     /* BOTÓN DE MÚSICA */
@@ -763,7 +864,7 @@
     <div class="overlay-container">
       <button class="btn-close-overlay" onclick="closeMap()">✕</button>
       <h3 id="mapTitle" style="font-family: 'Cinzel', serif; color: var(--text-secondary); text-align: center;">Ubicación</h3>
-      <iframe class="map-iframe" id="mapIframe" src="" allowfullscreen="" loading="lazy"></iframe>
+      <iframe class="map-iframe" id="mapIframe" src="" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
       <a href="https://maps.google.com" id="mapExternalLink" target="_blank" class="btn-view-info" style="text-align: center;">📍 ABRIR EN GOOGLE MAPS APP</a>
     </div>
   </div>
@@ -777,13 +878,7 @@
       
       <form class="rsvp-form" id="rsvpForm" onsubmit="submitRSVP(event)">
         <input type="text" id="guestName" name="nombre" class="rsvp-input" placeholder="Nombre completo / Familia" required>
-        <input type="tel" id="guestPhone" name="telefono" class="rsvp-input" placeholder="Teléfono / WhatsApp (opcional)">
-        <select id="guestAttendance" name="asistencia" class="rsvp-input" onchange="handleAttendanceChange()" required>
-          <option value="Sí asistiré">✨ ¡Sí asistiré!</option>
-          <option value="No podré asistir">😢 No podré asistir</option>
-        </select>
         <input type="number" id="guestCount" name="invitados" class="rsvp-input" placeholder="¿Cuántas personas asisten?" min="1" max="10" required>
-        <input type="text" id="guestMessage" name="mensaje" class="rsvp-input" placeholder="Mensaje o felicitación para Shelani (opcional)">
         <button type="submit" id="btnSubmitRSVP" class="btn-submit-rsvp">✉️ ENVIAR CONFIRMACIÓN</button>
       </form>
       <div id="rsvpStatusMsg" class="rsvp-status-msg"></div>
@@ -793,27 +888,23 @@
   <!-- OVERLAY DE DATOS BANCARIOS -->
   <div class="overlay-window" id="bankOverlay">
     <div class="overlay-container">
-      <button class="btn-close-overlay" onclick="closeBank()" aria-label="Cerrar datos bancarios">✕</button>
-      <div class="bank-heading-icon" aria-hidden="true">💝</div>
+      <button class="btn-close-overlay" onclick="closeBank()">✕</button>
       <h3 style="font-family: 'Cinzel', serif; color: var(--butterfly-pink); text-align: center;">Datos Bancarios</h3>
-      <p style="font-size: 0.8rem; text-align: center; margin-top: 5px; color: var(--text-main);">Agradezco de corazón tu detalle.</p>
-
-      <div class="bank-details-card">
-        <div class="bank-detail">
-          <span class="bank-detail-label">BANCO</span>
-          <p class="bank-detail-value">Banorte</p>
+      <p style="font-size: 0.82rem; text-align: center; margin-top: 6px; color: var(--text-main); opacity: 0.9;">Agradezco de corazón tu muestra de cariño.</p>
+      
+      <div class="bank-card-visual">
+        <div class="bank-card-header">
+          <span class="bank-badge">🏦 BANORTE</span>
+          <div class="bank-chip"></div>
         </div>
-        <div class="bank-detail">
-          <span class="bank-detail-label">BENEFICIARIO</span>
-          <p class="bank-detail-value">Alejandro Rodolfo Camacho Pérez</p>
-        </div>
-        <div class="bank-detail">
-          <span class="bank-detail-label">CUENTA CLABE</span>
-          <p class="bank-detail-value bank-clabe" id="bankClabe">072180002844828488</p>
-        </div>
+        
+        <p class="bank-field-label">Beneficiario</p>
+        <p class="bank-field-value">Alejandro Rodolfo Camacho Pérez</p>
+        
+        <p class="bank-field-label">Cuenta CLABE (18 dígitos)</p>
+        <div id="clabeText" class="bank-clabe-box">072180002844828488</div>
+        <button type="button" class="btn-copy-clabe" id="btnCopyClabe" onclick="copyClabe()">📋 COPIAR CLABE</button>
       </div>
-      <button class="bank-copy-btn" type="button" onclick="copyBankClabe()">📋 COPIAR CLABE</button>
-      <p class="bank-copy-feedback" id="bankCopyFeedback" role="status" aria-live="polite"></p>
     </div>
   </div>
 
@@ -865,7 +956,7 @@
         <div class="family-divider"></div>
 
         <div class="family-block">
-          <h4 class="family-role">🦋 Mis Padrinos 🦋</h4>
+          <h4 class="family-role">🦋 Mis Padrinos de Velación 🦋</h4>
           <p class="family-name">Amado Casaos Medina</p>
           <span class="family-amp">&amp;</span>
           <p class="family-name">Verónica Meraz Rangel</p>
@@ -900,15 +991,17 @@
         <div class="info-card scroll-reveal from-left">
           <div class="card-badge-icon">⛪</div>
           <h3>Ceremonia Religiosa</h3>
-          <p>Sábado 5 Diciembre 2026<br>Hora: 6:00 PM</p>
-          <button class="btn-view-info" onclick="showMap('iglesia')">📍 VER INFO DE LA IGLESIA</button>
+          <p class="venue-name">Parroquia de Santa María Magdalena de Atlicpac</p>
+          <p class="event-datetime">Sábado 5 de Diciembre 2026<br>Hora: 6:00 PM</p>
+          <button class="btn-view-info" onclick="showMap('iglesia')">📍 VER UBICACIÓN DE LA IGLESIA</button>
         </div>
 
         <div class="info-card scroll-reveal from-right">
           <div class="card-badge-icon">🥂</div>
           <h3>Recepción / Jardín</h3>
-          <p>Sábado 5 Diciembre 2026<br>Hora: 7:00 PM</p>
-          <button class="btn-view-info" onclick="showMap('jardin')">🎉 VER INFO DEL JARDÍN</button>
+          <p class="venue-name">El Encanto, Jardín de Eventos</p>
+          <p class="event-datetime">Sábado 5 de Diciembre 2026<br>Hora: 7:00 PM</p>
+          <button class="btn-view-info" onclick="showMap('jardin')">🎉 VER UBICACIÓN DEL JARDÍN</button>
         </div>
       </div>
 
@@ -963,17 +1056,27 @@
           </div>
         </div>
 
-        <p style="margin-top: 15px; margin-bottom: 15px; font-weight: 500; color: var(--text-main);">Por si no encuentras el regalo indicado existe la siguiente opcion :D   :</p>
-        <button class="btn-view-info" onclick="openBank()">💳 DATOS PARA TRANSFERENCIA</button>
+        <div class="family-divider" style="margin: 16px auto 12px;"></div>
+        <p style="margin-bottom: 14px; font-size: 0.86rem; font-weight: 400; color: var(--text-main);">Si prefieres realizar tu obsequio mediante transferencia o lluvia de sobres:</p>
+        <button class="btn-view-info" onclick="openBank()">💳 VER DATOS PARA TRANSFERENCIA</button>
       </div>
+      
+      <!-- CONFIRMACIÓN DE ASISTENCIA Y CIERRE ELEGANTEMENTE ILUSTRADO -->
+      <div class="scroll-reveal closing-footer">
+        <div class="ornament-divider" style="margin-bottom: 6px;">
+          <div class="ornament-line"></div>
+          <span class="ornament-diamond">✦</span>
+          <div class="ornament-line"></div>
+        </div>
 
-      <!-- CONFIRMACIÓN DE ASISTENCIA Y CIERRE -->
-      <div class="scroll-reveal">
         <button class="btn-rsvp-main" onclick="openRSVP()">💌 CONFIRMAR ASISTENCIA</button>
 
-        <p style="font-family: 'Great Vibes', cursive; font-size: 2rem; color: var(--butterfly-gold); margin-top: 18px;">
+        <div class="closing-butterfly" id="closingButterfly"></div>
+
+        <p style="font-family: 'Great Vibes', cursive; font-size: 2.15rem; color: var(--butterfly-gold); line-height: 1.2;">
           ¡Te espero para celebrar juntos!
         </p>
+        <div class="closing-date-badge">05 · DICIEMBRE · 2026</div>
       </div>
 
     </div>
@@ -986,7 +1089,9 @@
     /// https://docs.google.com/spreadsheets/d/1CKqDKrJR1oer5dkADuVWLYsMeSfxBG2uRtU_3__R3js/edit ///
     /// Solo pega abajo la URL "/exec" que te da Extensiones > Apps Script:       ///
     /// ========================================================================= ///
-    const GOOGLE_SHEETS_WEBAPP_URL = "PEGA_AQUI_TU_URL_DE_GOOGLE_SCRIPT";
+    const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwuXFyP5esWEvmu72CbJu3-5cnlWUF8WlkgJESvddrRODy390LYJNKW1NpUszgrXNO3KQ/exec";
+
+
 
     // Paletas de color fieles al estilo de la imagen de referencia
     const butterflyPalettes = {
@@ -1107,9 +1212,10 @@
       container.innerHTML = `<div style="width:100%;height:100%;transform:scale(${scale});">${buildIllustratedButterflySVG(pose, theme, speed)}</div>`;
     });
 
-    // Mariposa del sello y del encabezado principal
+    // Mariposa del sello, del encabezado principal y del cierre
     document.getElementById('sealButterfly').innerHTML = buildIllustratedButterflySVG('front', 'pink', '1.45s');
     document.getElementById('headerButterfly').innerHTML = buildIllustratedButterflySVG('side-right', 'pink', '1.40s');
+    document.getElementById('closingButterfly').innerHTML = buildIllustratedButterflySVG('front', 'gold', '1.48s');
 
     // Crear luciérnagas mágicas flotantes ligeras (con gradiente radial nativo, sin box-shadow costoso)
     const firefliesLayer = document.getElementById('firefliesLayer');
@@ -1171,6 +1277,8 @@
     musicEl.src = REPO_BASE + "musica.mp3";
     musicEl.onerror = () => { musicEl.src = "musica.mp3"; };
 
+
+
     // Lógica de Cuenta Regresiva (Apunta al 5 Dic 2026 - 6:00 PM)
     const fechaEvento = new Date("December 5, 2026 18:00:00").getTime();
     
@@ -1189,7 +1297,7 @@
     setInterval(updateCountdown, 1000);
 
     const mapData = {
-      iglesia: { title: 'Ceremonia Religiosa', theme: 'theme-iglesia', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.022697833984!2d-98.95411362451898!3d19.368169842734886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e26bd05a6d25%3A0xa8502f7f9816d759!2sParroquia%20de%20Santa%20Mar%C3%ADa%20Magdalena%20de%20Atlicpac!5e0!3m2!1ses-419!2smx!4v1790624027111!5m2!1ses-419!2smx', externalUrl: 'https://share.google/gkqFt4Y1guB9mTgLx' },
+      iglesia: { title: 'Ceremonia Religiosa', theme: 'theme-iglesia', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.022697833984!2d-98.95411362451898!3d19.368169842734886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e26bd05a6d25%3A0xa8502f7f9816d759!2sParroquia%20de%20Santa%20Mar%C3%ADa%20Magdalena%20de%20Atlicpac!5e0!3m2!1ses-419!2smx!4v1792969431892!5m2!1ses-419!2smx', externalUrl: 'https://maps.app.goo.gl/ShyeB6yLLP4oASPF7' },
       jardin: { title: 'Recepción y Fiesta', theme: 'theme-jardin', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.8869055250884!2d-98.94101392451881!3d19.374049042547664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e3eef972155d%3A0x41e0b637c050f1ee!2sEl%20Encanto%2C%20Jard%C3%ADn%20de%20Eventos!5e0!3m2!1ses-419!2smx!4v1790623866884!5m2!1ses-419!2smx', externalUrl: 'https://maps.app.goo.gl/BBn9hua3kwDdVXr7A' }
     };
 
@@ -1274,73 +1382,60 @@
       document.body.className = "";
     }
 
-    function handleAttendanceChange() {
-      const attendance = document.getElementById('guestAttendance').value;
-      const countInput = document.getElementById('guestCount');
-      if (attendance === "No podré asistir") {
-        countInput.value = "0";
-        countInput.min = "0";
-        countInput.style.display = "none";
-      } else {
-        countInput.style.display = "block";
-        countInput.min = "1";
-        if (countInput.value === "0") countInput.value = "";
-      }
-    }
-
     function openRSVP() {
       document.getElementById('rsvpStatusMsg').className = 'rsvp-status-msg';
       document.getElementById('rsvpStatusMsg').innerText = '';
-      handleAttendanceChange();
       document.getElementById('rsvpOverlay').classList.add('active');
     }
     function closeRSVP() {
       document.getElementById('rsvpOverlay').classList.remove('active');
     }
     
-    // Controles Modal Bancario
+    // Controles Modal Bancario y Copiado de CLABE sin espacios
     function openBank() { document.getElementById('bankOverlay').classList.add('active'); }
     function closeBank() { document.getElementById('bankOverlay').classList.remove('active'); }
-
-    // Copia la CLABE sin espacios para facilitar la transferencia.
-    async function copyBankClabe() {
-      const clabe = document.getElementById('bankClabe').textContent.trim();
-      const feedback = document.getElementById('bankCopyFeedback');
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(clabe);
-        } else {
-          const input = document.createElement('textarea');
-          input.value = clabe;
-          input.style.position = 'fixed';
-          input.style.opacity = '0';
-          document.body.appendChild(input);
-          input.select();
-          const copied = document.execCommand('copy');
-          input.remove();
-          if (!copied) throw new Error('No se pudo copiar');
-        }
-        feedback.textContent = '✓ CLABE copiada correctamente';
-      } catch (e) {
-        feedback.textContent = 'No se pudo copiar. Mantén presionada la CLABE para seleccionarla.';
+    function copyClabe() {
+      const rawClabe = document.getElementById('clabeText').innerText.replace(/\s+/g, '');
+      const btn = document.getElementById('btnCopyClabe');
+      const showSuccess = () => {
+        btn.classList.add('copied');
+        btn.innerText = '✅ ¡CLABE COPIADA!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerText = '📋 COPIAR CLABE';
+        }, 2200);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(rawClabe).then(showSuccess).catch(() => fallbackCopy(rawClabe, showSuccess));
+      } else {
+        fallbackCopy(rawClabe, showSuccess);
       }
     }
+    function fallbackCopy(text, callback) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); callback(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
 
-    // Envío de confirmación a Google Sheets / Excel
+    // Envío de confirmación a Google Sheets / Excel (solo Nombre y Cantidad de personas)
     async function submitRSVP(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmitRSVP');
       const statusMsg = document.getElementById('rsvpStatusMsg');
-      const attendanceVal = document.getElementById('guestAttendance').value;
-      const countVal = attendanceVal === "No podré asistir" ? 0 : (parseInt(document.getElementById('guestCount').value, 10) || 1);
+      const countVal = parseInt(document.getElementById('guestCount').value, 10) || 1;
       
       const payload = {
         fecha: new Date().toLocaleString('es-MX'),
         nombre: document.getElementById('guestName').value.trim(),
-        telefono: document.getElementById('guestPhone').value.trim(),
-        asistencia: attendanceVal,
+        telefono: "",
+        asistencia: "Sí asistiré",
         invitados: String(countVal),
-        mensaje: document.getElementById('guestMessage').value.trim()
+        mensaje: ""
       };
 
       btn.disabled = true;
@@ -1361,11 +1456,8 @@
         }
 
         statusMsg.className = 'rsvp-status-msg success';
-        statusMsg.innerText = attendanceVal === "No podré asistir"
-          ? `¡Muchas gracias por avisarnos, ${payload.nombre}! Se ha registrado tu respuesta.`
-          : `¡Muchas gracias, ${payload.nombre}! Se ha confirmado tu asistencia para ${payload.invitados} persona(s).`;
+        statusMsg.innerText = `¡Muchas gracias, ${payload.nombre}! Se ha confirmado la asistencia para ${payload.invitados} persona(s).`;
         document.getElementById('rsvpForm').reset();
-        handleAttendanceChange();
 
         setTimeout(() => {
           closeRSVP();
