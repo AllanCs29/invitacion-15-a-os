@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mis 15 Años - Shelani Esmeralda</title>
+  <meta name="description" content="Con la bendición de Dios y el amor de mi familia, te invito a celebrar mis XV años este Sábado 5 de Diciembre de 2026.">
+
+  <!-- TARJETA DE VISTA PREVIA PARA WHATSAPP Y REDES SOCIALES (OPEN GRAPH) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mis XV Años - Shelani Esmeralda">
+  <meta property="og:title" content="✨ Mis XV Años - Shelani Esmeralda ✨">
+  <meta property="og:description" content="Con la bendición de Dios y el amor de mi familia, te invito a celebrar mis 15 años este Sábado 5 de Diciembre de 2026. ¡Toca para abrir tu invitación!">
+  <meta property="og:image" content="https://allancs29.github.io/invitacion-15-a-os/foto_shelani.jpeg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="800">
+  <meta property="og:url" content="https://allancs29.github.io/invitacion-15-a-os/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="✨ Mis XV Años - Shelani Esmeralda ✨">
+  <meta name="twitter:description" content="Te invito a celebrar mis XV años este Sábado 5 de Diciembre de 2026.">
+  <meta name="twitter:image" content="https://allancs29.github.io/invitacion-15-a-os/foto_shelani.jpeg">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -657,6 +673,21 @@
     }
     .btn-submit-rsvp:disabled { opacity: 0.6; cursor: wait; }
 
+    .btn-copy-clabe {
+      margin-top: 14px; width: 100%; padding: 11px 16px;
+      background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink));
+      color: #12091f; border: none; border-radius: 25px;
+      font-family: 'Montserrat', sans-serif; font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 1px; cursor: pointer;
+      box-shadow: 0 0 15px rgba(153, 255, 255, 0.35);
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+    .btn-copy-clabe:active { transform: scale(0.97); }
+    .btn-copy-clabe.copied {
+      background: linear-gradient(135deg, #39ff14, #00f5ff);
+      color: #091a0d;
+    }
+
     .rsvp-status-msg {
       display: none; margin-top: 12px; padding: 12px;
       border-radius: 10px; font-size: 0.85rem; text-align: center; line-height: 1.4;
@@ -748,13 +779,7 @@
       
       <form class="rsvp-form" id="rsvpForm" onsubmit="submitRSVP(event)">
         <input type="text" id="guestName" name="nombre" class="rsvp-input" placeholder="Nombre completo / Familia" required>
-        <input type="tel" id="guestPhone" name="telefono" class="rsvp-input" placeholder="Teléfono / WhatsApp (opcional)">
-        <select id="guestAttendance" name="asistencia" class="rsvp-input" onchange="handleAttendanceChange()" required>
-          <option value="Sí asistiré">✨ ¡Sí asistiré!</option>
-          <option value="No podré asistir">😢 No podré asistir</option>
-        </select>
         <input type="number" id="guestCount" name="invitados" class="rsvp-input" placeholder="¿Cuántas personas asisten?" min="1" max="10" required>
-        <input type="text" id="guestMessage" name="mensaje" class="rsvp-input" placeholder="Mensaje o felicitación para Shelani (opcional)">
         <button type="submit" id="btnSubmitRSVP" class="btn-submit-rsvp">✉️ ENVIAR CONFIRMACIÓN</button>
       </form>
       <div id="rsvpStatusMsg" class="rsvp-status-msg"></div>
@@ -779,7 +804,8 @@
         
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>CUENTA CLABE:</strong></p>
         <!-- REEMPLAZA LOS NÚMEROS DE LA CLABE A CONTINUACIÓN -->
-        <p style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;">000 000 0000000000 0</p>
+        <p id="clabeText" style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;">000 000 0000000000 0</p>
+        <button type="button" class="btn-copy-clabe" id="btnCopyClabe" onclick="copyClabe()">📋 COPIAR CLABE</button>
       </div>
     </div>
   </div>
@@ -1260,49 +1286,60 @@
       document.body.className = "";
     }
 
-    function handleAttendanceChange() {
-      const attendance = document.getElementById('guestAttendance').value;
-      const countInput = document.getElementById('guestCount');
-      if (attendance === "No podré asistir") {
-        countInput.value = "0";
-        countInput.min = "0";
-        countInput.style.display = "none";
-      } else {
-        countInput.style.display = "block";
-        countInput.min = "1";
-        if (countInput.value === "0") countInput.value = "";
-      }
-    }
-
     function openRSVP() {
       document.getElementById('rsvpStatusMsg').className = 'rsvp-status-msg';
       document.getElementById('rsvpStatusMsg').innerText = '';
-      handleAttendanceChange();
       document.getElementById('rsvpOverlay').classList.add('active');
     }
     function closeRSVP() {
       document.getElementById('rsvpOverlay').classList.remove('active');
     }
     
-    // Controles Modal Bancario
+    // Controles Modal Bancario y Copiado de CLABE sin espacios
     function openBank() { document.getElementById('bankOverlay').classList.add('active'); }
     function closeBank() { document.getElementById('bankOverlay').classList.remove('active'); }
+    function copyClabe() {
+      const rawClabe = document.getElementById('clabeText').innerText.replace(/\s+/g, '');
+      const btn = document.getElementById('btnCopyClabe');
+      const showSuccess = () => {
+        btn.classList.add('copied');
+        btn.innerText = '✅ ¡CLABE COPIADA!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerText = '📋 COPIAR CLABE';
+        }, 2200);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(rawClabe).then(showSuccess).catch(() => fallbackCopy(rawClabe, showSuccess));
+      } else {
+        fallbackCopy(rawClabe, showSuccess);
+      }
+    }
+    function fallbackCopy(text, callback) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); callback(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
 
-    // Envío de confirmación a Google Sheets / Excel
+    // Envío de confirmación a Google Sheets / Excel (solo Nombre y Cantidad de personas)
     async function submitRSVP(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmitRSVP');
       const statusMsg = document.getElementById('rsvpStatusMsg');
-      const attendanceVal = document.getElementById('guestAttendance').value;
-      const countVal = attendanceVal === "No podré asistir" ? 0 : (parseInt(document.getElementById('guestCount').value, 10) || 1);
+      const countVal = parseInt(document.getElementById('guestCount').value, 10) || 1;
       
       const payload = {
         fecha: new Date().toLocaleString('es-MX'),
         nombre: document.getElementById('guestName').value.trim(),
-        telefono: document.getElementById('guestPhone').value.trim(),
-        asistencia: attendanceVal,
+        telefono: "",
+        asistencia: "Sí asistiré",
         invitados: String(countVal),
-        mensaje: document.getElementById('guestMessage').value.trim()
+        mensaje: ""
       };
 
       btn.disabled = true;
@@ -1323,11 +1360,8 @@
         }
 
         statusMsg.className = 'rsvp-status-msg success';
-        statusMsg.innerText = attendanceVal === "No podré asistir"
-          ? `¡Muchas gracias por avisarnos, ${payload.nombre}! Se ha registrado tu respuesta.`
-          : `¡Muchas gracias, ${payload.nombre}! Se ha confirmado tu asistencia para ${payload.invitados} persona(s).`;
+        statusMsg.innerText = `¡Muchas gracias, ${payload.nombre}! Se ha confirmado la asistencia para ${payload.invitados} persona(s).`;
         document.getElementById('rsvpForm').reset();
-        handleAttendanceChange();
 
         setTimeout(() => {
           closeRSVP();
