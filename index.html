@@ -4,22 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mis 15 Años - Shelani Esmeralda</title>
-  <meta name="description" content="Con la bendición de Dios y el amor de mi familia, te invito a celebrar mis XV años este Sábado 5 de Diciembre de 2026.">
-
-  <!-- TARJETA DE VISTA PREVIA PARA WHATSAPP Y REDES SOCIALES (OPEN GRAPH) -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Mis XV Años - Shelani Esmeralda">
-  <meta property="og:title" content="✨ Mis XV Años - Shelani Esmeralda ✨">
-  <meta property="og:description" content="Con la bendición de Dios y el amor de mi familia, te invito a celebrar mis 15 años este Sábado 5 de Diciembre de 2026. ¡Toca para abrir tu invitación!">
-  <meta property="og:image" content="https://allancs29.github.io/invitacion-15-a-os/foto_shelani.jpeg">
-  <meta property="og:image:type" content="image/jpeg">
-  <meta property="og:image:width" content="800">
-  <meta property="og:image:height" content="800">
-  <meta property="og:url" content="https://allancs29.github.io/invitacion-15-a-os/">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="✨ Mis XV Años - Shelani Esmeralda ✨">
-  <meta name="twitter:description" content="Te invito a celebrar mis XV años este Sábado 5 de Diciembre de 2026.">
-  <meta name="twitter:image" content="https://allancs29.github.io/invitacion-15-a-os/foto_shelani.jpeg">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -605,6 +589,7 @@
       width: 36px; height: 36px; background: rgba(255,255,255,0.06);
       border-radius: 50%; border: 1px solid var(--border-color); flex-shrink: 0;
     }
+
     /* BOTONES */
     .btn-view-info, .btn-rsvp-main {
       display: inline-block; padding: 11px 22px; background: var(--btn-bg); color: var(--btn-text);
@@ -652,21 +637,6 @@
       cursor: pointer; letter-spacing: 1px;
     }
     .btn-submit-rsvp:disabled { opacity: 0.6; cursor: wait; }
-
-    .btn-copy-clabe {
-      margin-top: 14px; width: 100%; padding: 11px 16px;
-      background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink));
-      color: #12091f; border: none; border-radius: 25px;
-      font-family: 'Montserrat', sans-serif; font-size: 0.82rem; font-weight: 700;
-      letter-spacing: 1px; cursor: pointer;
-      box-shadow: 0 0 15px rgba(153, 255, 255, 0.35);
-      transition: transform 0.2s ease, background 0.3s ease;
-    }
-    .btn-copy-clabe:active { transform: scale(0.97); }
-    .btn-copy-clabe.copied {
-      background: linear-gradient(135deg, #39ff14, #00f5ff);
-      color: #091a0d;
-    }
 
     .rsvp-status-msg {
       display: none; margin-top: 12px; padding: 12px;
@@ -759,7 +729,13 @@
       
       <form class="rsvp-form" id="rsvpForm" onsubmit="submitRSVP(event)">
         <input type="text" id="guestName" name="nombre" class="rsvp-input" placeholder="Nombre completo / Familia" required>
-        <input type="number" id="guestCount" name="invitados" class="rsvp-input" placeholder="¿Cuántas personas asisten?" min="1" max="50" required>
+        <input type="tel" id="guestPhone" name="telefono" class="rsvp-input" placeholder="Teléfono / WhatsApp (opcional)">
+        <select id="guestAttendance" name="asistencia" class="rsvp-input" onchange="handleAttendanceChange()" required>
+          <option value="Sí asistiré">✨ ¡Sí asistiré!</option>
+          <option value="No podré asistir">😢 No podré asistir</option>
+        </select>
+        <input type="number" id="guestCount" name="invitados" class="rsvp-input" placeholder="¿Cuántas personas asisten?" min="1" max="10" required>
+        <input type="text" id="guestMessage" name="mensaje" class="rsvp-input" placeholder="Mensaje o felicitación para Shelani (opcional)">
         <button type="submit" id="btnSubmitRSVP" class="btn-submit-rsvp">✉️ ENVIAR CONFIRMACIÓN</button>
       </form>
       <div id="rsvpStatusMsg" class="rsvp-status-msg"></div>
@@ -776,16 +752,15 @@
       <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: left;">
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BANCO:</strong></p>
         <!-- REEMPLAZA EL NOMBRE DEL BANCO A CONTINUACIÓN -->
-        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[Banorte]</p>
+        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE DEL BANCO]</p>
         
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BENEFICIARIO:</strong></p>
         <!-- REEMPLAZA EL NOMBRE DEL BENEFICIARIO A CONTINUACIÓN -->
-        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[Alejandro Rodolfo Camacho Pérez]</p>
+        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE COMPLETO DEL BENEFICIARIO]</p>
         
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>CUENTA CLABE:</strong></p>
         <!-- REEMPLAZA LOS NÚMEROS DE LA CLABE A CONTINUACIÓN -->
-        <p id="clabeText" style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;">072180002844828488</p>
-        <button type="button" class="btn-copy-clabe" id="btnCopyClabe" onclick="copyClabe()">📋 COPIAR CLABE</button>
+        <p style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;">000 000 0000000000 0</p>
       </div>
     </div>
   </div>
@@ -838,7 +813,7 @@
         <div class="family-divider"></div>
 
         <div class="family-block">
-          <h4 class="family-role"> Mis Padrinos </h4>
+          <h4 class="family-role">🦋 Mis Padrinos de Velación 🦋</h4>
           <p class="family-name">Amado Casaos Medina</p>
           <span class="family-amp">&amp;</span>
           <p class="family-name">Verónica Meraz Rangel</p>
@@ -939,6 +914,7 @@
         <p style="margin-top: 15px; margin-bottom: 15px; font-weight: 500; color: var(--text-main);">Por si no encuentras el regalo indicado existe la siguiente opcion :D   :</p>
         <button class="btn-view-info" onclick="openBank()">💳 DATOS PARA TRANSFERENCIA</button>
       </div>
+      
       <!-- CONFIRMACIÓN DE ASISTENCIA Y CIERRE -->
       <div class="scroll-reveal">
         <button class="btn-rsvp-main" onclick="openRSVP()">💌 CONFIRMAR ASISTENCIA</button>
@@ -958,12 +934,7 @@
     /// https://docs.google.com/spreadsheets/d/1CKqDKrJR1oer5dkADuVWLYsMeSfxBG2uRtU_3__R3js/edit ///
     /// Solo pega abajo la URL "/exec" que te da Extensiones > Apps Script:       ///
     /// ========================================================================= ///
-    const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwuXFyP5esWEvmu72CbJu3-5cnlWUF8WlkgJESvddrRODy390LYJNKW1NpUszgrXNO3KQ/exec";
-
-    /// ========================================== ///
-    /// 2. PON AQUÍ EL ENLACE DEL INSTAGRAM DE ELLA ///
-    /// ========================================== ///
-    const ENLACE_INSTAGRAM = "https://www.instagram.com/shelyssmin?utm_source=qr&stkn=cGZraXhwamFudTM4"; 
+    const GOOGLE_SHEETS_WEBAPP_URL = "PEGA_AQUI_TU_URL_DE_GOOGLE_SCRIPT";
 
     // Paletas de color fieles al estilo de la imagen de referencia
     const butterflyPalettes = {
@@ -1148,10 +1119,6 @@
     musicEl.src = REPO_BASE + "musica.mp3";
     musicEl.onerror = () => { musicEl.src = "musica.mp3"; };
 
-    // Configuración Automática de Instagram y QR
-    document.getElementById('igLink').href = ENLACE_INSTAGRAM;
-    document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ENLACE_INSTAGRAM)}`;
-
     // Lógica de Cuenta Regresiva (Apunta al 5 Dic 2026 - 6:00 PM)
     const fechaEvento = new Date("December 5, 2026 18:00:00").getTime();
     
@@ -1255,60 +1222,49 @@
       document.body.className = "";
     }
 
+    function handleAttendanceChange() {
+      const attendance = document.getElementById('guestAttendance').value;
+      const countInput = document.getElementById('guestCount');
+      if (attendance === "No podré asistir") {
+        countInput.value = "0";
+        countInput.min = "0";
+        countInput.style.display = "none";
+      } else {
+        countInput.style.display = "block";
+        countInput.min = "1";
+        if (countInput.value === "0") countInput.value = "";
+      }
+    }
+
     function openRSVP() {
       document.getElementById('rsvpStatusMsg').className = 'rsvp-status-msg';
       document.getElementById('rsvpStatusMsg').innerText = '';
+      handleAttendanceChange();
       document.getElementById('rsvpOverlay').classList.add('active');
     }
     function closeRSVP() {
       document.getElementById('rsvpOverlay').classList.remove('active');
     }
     
-    // Controles Modal Bancario y Copiado de CLABE sin espacios
+    // Controles Modal Bancario
     function openBank() { document.getElementById('bankOverlay').classList.add('active'); }
     function closeBank() { document.getElementById('bankOverlay').classList.remove('active'); }
-    function copyClabe() {
-      const rawClabe = document.getElementById('clabeText').innerText.replace(/\s+/g, '');
-      const btn = document.getElementById('btnCopyClabe');
-      const showSuccess = () => {
-        btn.classList.add('copied');
-        btn.innerText = '✅ ¡CLABE COPIADA!';
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.innerText = '📋 COPIAR CLABE';
-        }, 2200);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(rawClabe).then(showSuccess).catch(() => fallbackCopy(rawClabe, showSuccess));
-      } else {
-        fallbackCopy(rawClabe, showSuccess);
-      }
-    }
-    function fallbackCopy(text, callback) {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); callback(); } catch (e) {}
-      document.body.removeChild(ta);
-    }
 
-    // Envío de confirmación a Google Sheets / Excel (solo Nombre y Cantidad de personas)
+    // Envío de confirmación a Google Sheets / Excel
     async function submitRSVP(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmitRSVP');
       const statusMsg = document.getElementById('rsvpStatusMsg');
-      const countVal = parseInt(document.getElementById('guestCount').value, 10) || 1;
+      const attendanceVal = document.getElementById('guestAttendance').value;
+      const countVal = attendanceVal === "No podré asistir" ? 0 : (parseInt(document.getElementById('guestCount').value, 10) || 1);
       
       const payload = {
         fecha: new Date().toLocaleString('es-MX'),
         nombre: document.getElementById('guestName').value.trim(),
-        telefono: "",
-        asistencia: "Sí asistiré",
+        telefono: document.getElementById('guestPhone').value.trim(),
+        asistencia: attendanceVal,
         invitados: String(countVal),
-        mensaje: ""
+        mensaje: document.getElementById('guestMessage').value.trim()
       };
 
       btn.disabled = true;
@@ -1329,8 +1285,11 @@
         }
 
         statusMsg.className = 'rsvp-status-msg success';
-        statusMsg.innerText = `¡Muchas gracias, ${payload.nombre}! Se ha confirmado la asistencia para ${payload.invitados} persona(s).`;
+        statusMsg.innerText = attendanceVal === "No podré asistir"
+          ? `¡Muchas gracias por avisarnos, ${payload.nombre}! Se ha registrado tu respuesta.`
+          : `¡Muchas gracias, ${payload.nombre}! Se ha confirmado tu asistencia para ${payload.invitados} persona(s).`;
         document.getElementById('rsvpForm').reset();
+        handleAttendanceChange();
 
         setTimeout(() => {
           closeRSVP();
