@@ -749,7 +749,7 @@
       <form class="rsvp-form" id="rsvpForm" onsubmit="submitRSVP(event)">
         <input type="text" id="guestName" name="nombre" class="rsvp-input" placeholder="Nombre completo / Familia" required>
         <input type="tel" id="guestPhone" name="telefono" class="rsvp-input" placeholder="Teléfono / WhatsApp (opcional)">
-        <select id="guestAttendance" name="asistencia" class="rsvp-input" required>
+        <select id="guestAttendance" name="asistencia" class="rsvp-input" onchange="handleAttendanceChange()" required>
           <option value="Sí asistiré">✨ ¡Sí asistiré!</option>
           <option value="No podré asistir">😢 No podré asistir</option>
         </select>
@@ -771,15 +771,15 @@
       <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: left;">
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BANCO:</strong></p>
         <!-- REEMPLAZA EL NOMBRE DEL BANCO A CONTINUACIÓN -->
-        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[Banorte]</p>
+        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE DEL BANCO]</p>
         
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BENEFICIARIO:</strong></p>
         <!-- REEMPLAZA EL NOMBRE DEL BENEFICIARIO A CONTINUACIÓN -->
-        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[Alejandro Rodolfo Camacho Peréz]</p>
+        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE COMPLETO DEL BENEFICIARIO]</p>
         
         <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>CUENTA CLABE:</strong></p>
         <!-- REEMPLAZA LOS NÚMEROS DE LA CLABE A CONTINUACIÓN -->
-        <p style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;"> 072180002844828488 </p>
+        <p style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;">000 000 0000000000 0</p>
       </div>
     </div>
   </div>
@@ -832,7 +832,7 @@
         <div class="family-divider"></div>
 
         <div class="family-block">
-          <h4 class="family-role"> Mis Padrinos </h4>
+          <h4 class="family-role">🦋 Mis Padrinos de Velación 🦋</h4>
           <p class="family-name">Amado Casaos Medina</p>
           <span class="family-amp">&amp;</span>
           <p class="family-name">Verónica Meraz Rangel</p>
@@ -958,9 +958,12 @@
 
   <script>
     /// ========================================================================= ///
-    /// 1. PEGA AQUÍ LA URL DE TU GOOGLE APPS SCRIPT PARA GUARDAR EN EXCEL/SHEETS ///
+    /// 1. CONEXIÓN CON TU HOJA DE GOOGLE SHEETS / EXCEL DE CONFIRMACIONES        ///
+    /// Hoja ya creada en tu Drive:                                               ///
+    /// https://docs.google.com/spreadsheets/d/1CKqDKrJR1oer5dkADuVWLYsMeSfxBG2uRtU_3__R3js/edit ///
+    /// Solo pega abajo la URL "/exec" que te da Extensiones > Apps Script:       ///
     /// ========================================================================= ///
-    const GOOGLE_SHEETS_WEBAPP_URL = "PEGA_AQUI_TU_URL_DE_GOOGLE_SCRIPT";
+    const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwuXFyP5esWEvmu72CbJu3-5cnlWUF8WlkgJESvddrRODy390LYJNKW1NpUszgrXNO3KQ/exec";
 
     /// ========================================== ///
     /// 2. PON AQUÍ EL ENLACE DEL INSTAGRAM DE ELLA ///
@@ -1172,7 +1175,7 @@
     setInterval(updateCountdown, 1000);
 
     const mapData = {
-      iglesia: { title: 'Ceremonia Religiosa', theme: 'theme-iglesia', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.0228142893898!2d-98.95630230321045!3d19.368164800000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e26bd05a6d25%3A0xa8502f7f9816d759!2sParroquia%20de%20Santa%20Mar%C3%ADa%20Magdalena%20de%20Atlicpac!5e0!3m2!1ses-419!2smx!4v1792875069841!5m2!1ses-419!2smx', externalUrl: 'https://maps.app.goo.gl/JZmshNSNQC6C6k9y9'},
+      iglesia: { title: 'Ceremonia Religiosa', theme: 'theme-iglesia', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.022697833984!2d-98.95411362451898!3d19.368169842734886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e26bd05a6d25%3A0xa8502f7f9816d759!2sParroquia%20de%20Santa%20Mar%C3%ADa%20Magdalena%20de%20Atlicpac!5e0!3m2!1ses-419!2smx!4v1790624027111!5m2!1ses-419!2smx', externalUrl: 'https://share.google/gkqFt4Y1guB9mTgLx' },
       jardin: { title: 'Recepción y Fiesta', theme: 'theme-jardin', embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.8869055250884!2d-98.94101392451881!3d19.374049042547664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1e3eef972155d%3A0x41e0b637c050f1ee!2sEl%20Encanto%2C%20Jard%C3%ADn%20de%20Eventos!5e0!3m2!1ses-419!2smx!4v1790623866884!5m2!1ses-419!2smx', externalUrl: 'https://maps.app.goo.gl/BBn9hua3kwDdVXr7A' }
     };
 
@@ -1257,9 +1260,24 @@
       document.body.className = "";
     }
 
+    function handleAttendanceChange() {
+      const attendance = document.getElementById('guestAttendance').value;
+      const countInput = document.getElementById('guestCount');
+      if (attendance === "No podré asistir") {
+        countInput.value = "0";
+        countInput.min = "0";
+        countInput.style.display = "none";
+      } else {
+        countInput.style.display = "block";
+        countInput.min = "1";
+        if (countInput.value === "0") countInput.value = "";
+      }
+    }
+
     function openRSVP() {
       document.getElementById('rsvpStatusMsg').className = 'rsvp-status-msg';
       document.getElementById('rsvpStatusMsg').innerText = '';
+      handleAttendanceChange();
       document.getElementById('rsvpOverlay').classList.add('active');
     }
     function closeRSVP() {
@@ -1270,18 +1288,20 @@
     function openBank() { document.getElementById('bankOverlay').classList.add('active'); }
     function closeBank() { document.getElementById('bankOverlay').classList.remove('active'); }
 
-    // Envío de confirmación a Google Sheets (descargable en Excel)
+    // Envío de confirmación a Google Sheets / Excel
     async function submitRSVP(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmitRSVP');
       const statusMsg = document.getElementById('rsvpStatusMsg');
+      const attendanceVal = document.getElementById('guestAttendance').value;
+      const countVal = attendanceVal === "No podré asistir" ? 0 : (parseInt(document.getElementById('guestCount').value, 10) || 1);
       
       const payload = {
         fecha: new Date().toLocaleString('es-MX'),
         nombre: document.getElementById('guestName').value.trim(),
         telefono: document.getElementById('guestPhone').value.trim(),
-        asistencia: document.getElementById('guestAttendance').value,
-        invitados: document.getElementById('guestCount').value,
+        asistencia: attendanceVal,
+        invitados: String(countVal),
         mensaje: document.getElementById('guestMessage').value.trim()
       };
 
@@ -1291,19 +1311,23 @@
 
       try {
         if (GOOGLE_SHEETS_WEBAPP_URL && !GOOGLE_SHEETS_WEBAPP_URL.includes("PEGA_AQUI")) {
-          const formData = new FormData();
-          Object.keys(payload).forEach(key => formData.append(key, payload[key]));
+          const params = new URLSearchParams();
+          Object.keys(payload).forEach(key => params.append(key, payload[key]));
 
           await fetch(GOOGLE_SHEETS_WEBAPP_URL, {
             method: 'POST',
             mode: 'no-cors',
-            body: formData
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+            body: params.toString()
           });
         }
 
         statusMsg.className = 'rsvp-status-msg success';
-        statusMsg.innerText = `¡Muchas gracias, ${payload.nombre}! Se ha confirmado la asistencia para ${payload.invitados} personas.`;
+        statusMsg.innerText = attendanceVal === "No podré asistir"
+          ? `¡Muchas gracias por avisarnos, ${payload.nombre}! Se ha registrado tu respuesta.`
+          : `¡Muchas gracias, ${payload.nombre}! Se ha confirmado tu asistencia para ${payload.invitados} persona(s).`;
         document.getElementById('rsvpForm').reset();
+        handleAttendanceChange();
 
         setTimeout(() => {
           closeRSVP();
