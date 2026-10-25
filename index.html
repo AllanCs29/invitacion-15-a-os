@@ -590,23 +590,52 @@
       border-radius: 50%; border: 1px solid var(--border-color); flex-shrink: 0;
     }
 
-    /* INSTAGRAM Y QR */
-    .ig-section {
-      background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(176, 38, 255, 0.1));
-      border-radius: 18px; padding: 26px 20px; text-align: center;
-      border: 1px dashed var(--butterfly-pink); margin-top: 6px;
+    /* DETALLES DE TRANSFERENCIA: estilo exclusivo del cuadro bancario */
+    .bank-heading-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px; margin: 0 auto 12px;
+      border-radius: 50%; color: var(--butterfly-gold); font-size: 1.45rem;
+      background: linear-gradient(145deg, rgba(255,224,102,0.14), rgba(255,153,204,0.12));
+      border: 1px solid rgba(255,224,102,0.4);
+      box-shadow: 0 0 18px rgba(255,224,102,0.12);
     }
-    .qr-code {
-      width: 136px; height: 136px; margin: 16px auto; border-radius: 14px;
-      padding: 8px; background: white; display: block;
-      box-shadow: 0 0 18px rgba(255, 153, 204, 0.35);
+    .bank-details-card {
+      background: linear-gradient(150deg, rgba(255,255,255,0.07), rgba(176,38,255,0.09));
+      border: 1px solid rgba(255,224,102,0.38); border-radius: 17px;
+      padding: 19px 17px; margin-top: 20px; text-align: left;
+      box-shadow: inset 0 1px rgba(255,255,255,0.07);
     }
-    .btn-ig {
-      display: inline-block; padding: 11px 24px;
-      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-      color: white; border-radius: 25px; text-decoration: none;
-      font-size: 0.82rem; font-weight: bold; margin-top: 10px;
-      box-shadow: 0 0 16px rgba(204, 35, 102, 0.4);
+    .bank-detail + .bank-detail {
+      margin-top: 15px; padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .bank-detail-label {
+      display: block; margin-bottom: 6px;
+      font-family: 'Cinzel', serif; font-size: 0.72rem;
+      letter-spacing: 1.4px; color: var(--butterfly-gold);
+    }
+    .bank-detail-value {
+      font-size: 0.94rem; line-height: 1.55; color: #fff;
+      font-weight: 500; overflow-wrap: anywhere;
+    }
+    .bank-clabe {
+      font-size: clamp(0.92rem, 4vw, 1.1rem);
+      letter-spacing: 0.35px; font-weight: 700;
+      font-variant-numeric: tabular-nums; color: var(--butterfly-blue);
+    }
+    .bank-copy-btn {
+      display: flex; justify-content: center; align-items: center;
+      width: 100%; margin-top: 14px; padding: 12px 14px;
+      background: linear-gradient(135deg, var(--butterfly-blue), var(--butterfly-pink), var(--butterfly-gold));
+      color: #12091f; border: 0; border-radius: 24px;
+      font: 700 0.81rem 'Montserrat', sans-serif; cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .bank-copy-btn:active { transform: scale(0.98); }
+    .bank-copy-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+    .bank-copy-feedback {
+      min-height: 1.25rem; margin-top: 9px; color: var(--butterfly-blue);
+      font-size: 0.74rem; text-align: center;
     }
 
     /* BOTONES */
@@ -764,23 +793,27 @@
   <!-- OVERLAY DE DATOS BANCARIOS -->
   <div class="overlay-window" id="bankOverlay">
     <div class="overlay-container">
-      <button class="btn-close-overlay" onclick="closeBank()">✕</button>
+      <button class="btn-close-overlay" onclick="closeBank()" aria-label="Cerrar datos bancarios">✕</button>
+      <div class="bank-heading-icon" aria-hidden="true">💝</div>
       <h3 style="font-family: 'Cinzel', serif; color: var(--butterfly-pink); text-align: center;">Datos Bancarios</h3>
       <p style="font-size: 0.8rem; text-align: center; margin-top: 5px; color: var(--text-main);">Agradezco de corazón tu detalle.</p>
-      
-      <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: left;">
-        <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BANCO:</strong></p>
-        <!-- REEMPLAZA EL NOMBRE DEL BANCO A CONTINUACIÓN -->
-        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE DEL BANCO]</p>
-        
-        <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>BENEFICIARIO:</strong></p>
-        <!-- REEMPLAZA EL NOMBRE DEL BENEFICIARIO A CONTINUACIÓN -->
-        <p style="font-size: 0.95rem; margin-bottom: 15px; color: #fff;">[NOMBRE COMPLETO DEL BENEFICIARIO]</p>
-        
-        <p style="font-size: 0.85rem; color: var(--butterfly-gold); margin-bottom: 5px;"><strong>CUENTA CLABE:</strong></p>
-        <!-- REEMPLAZA LOS NÚMEROS DE LA CLABE A CONTINUACIÓN -->
-        <p style="font-size: 1.1rem; letter-spacing: 2px; color: #fff;">000 000 0000000000 0</p>
+
+      <div class="bank-details-card">
+        <div class="bank-detail">
+          <span class="bank-detail-label">BANCO</span>
+          <p class="bank-detail-value">Banorte</p>
+        </div>
+        <div class="bank-detail">
+          <span class="bank-detail-label">BENEFICIARIO</span>
+          <p class="bank-detail-value">Alejandro Rodolfo Camacho Pérez</p>
+        </div>
+        <div class="bank-detail">
+          <span class="bank-detail-label">CUENTA CLABE</span>
+          <p class="bank-detail-value bank-clabe" id="bankClabe">072180002844828488</p>
+        </div>
       </div>
+      <button class="bank-copy-btn" type="button" onclick="copyBankClabe()">📋 COPIAR CLABE</button>
+      <p class="bank-copy-feedback" id="bankCopyFeedback" role="status" aria-live="polite"></p>
     </div>
   </div>
 
@@ -832,7 +865,7 @@
         <div class="family-divider"></div>
 
         <div class="family-block">
-          <h4 class="family-role">🦋 Mis Padrinos de Velación 🦋</h4>
+          <h4 class="family-role">🦋 Mis Padrinos 🦋</h4>
           <p class="family-name">Amado Casaos Medina</p>
           <span class="family-amp">&amp;</span>
           <p class="family-name">Verónica Meraz Rangel</p>
@@ -934,16 +967,6 @@
         <button class="btn-view-info" onclick="openBank()">💳 DATOS PARA TRANSFERENCIA</button>
       </div>
 
-      <!-- SECCIÓN INSTAGRAM Y CÓDIGO QR -->
-      <div class="ig-section scroll-reveal">
-        <h3 style="font-family: 'Cinzel', serif; color: var(--butterfly-pink); font-size: 1.12rem;">¡Captura los momentos!</h3>
-        <p style="font-size: 0.82rem; color: var(--text-main); margin-top: 8px;">Etiquétame en tus fotos y videos en mi <br><strong style="color: var(--butterfly-gold);">INSTAGRAM</strong></p>
-        
-        <img id="qrImage" class="qr-code" loading="lazy" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwww.instagram.com%2Fshelyssmin" alt="Código QR de Instagram">
-        
-        <a href="https://www.instagram.com/shelyssmin?utm_source=qr&stkn=cGZraXhwamFudTM4" id="igLink" target="_blank" class="btn-ig">📸 SÍGUEME EN INSTAGRAM</a>
-      </div>
-      
       <!-- CONFIRMACIÓN DE ASISTENCIA Y CIERRE -->
       <div class="scroll-reveal">
         <button class="btn-rsvp-main" onclick="openRSVP()">💌 CONFIRMAR ASISTENCIA</button>
@@ -964,11 +987,6 @@
     /// Solo pega abajo la URL "/exec" que te da Extensiones > Apps Script:       ///
     /// ========================================================================= ///
     const GOOGLE_SHEETS_WEBAPP_URL = "PEGA_AQUI_TU_URL_DE_GOOGLE_SCRIPT";
-
-    /// ========================================== ///
-    /// 2. PON AQUÍ EL ENLACE DEL INSTAGRAM DE ELLA ///
-    /// ========================================== ///
-    const ENLACE_INSTAGRAM = "https://www.instagram.com/shelyssmin?utm_source=qr&stkn=cGZraXhwamFudTM4"; 
 
     // Paletas de color fieles al estilo de la imagen de referencia
     const butterflyPalettes = {
@@ -1153,10 +1171,6 @@
     musicEl.src = REPO_BASE + "musica.mp3";
     musicEl.onerror = () => { musicEl.src = "musica.mp3"; };
 
-    // Configuración Automática de Instagram y QR
-    document.getElementById('igLink').href = ENLACE_INSTAGRAM;
-    document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ENLACE_INSTAGRAM)}`;
-
     // Lógica de Cuenta Regresiva (Apunta al 5 Dic 2026 - 6:00 PM)
     const fechaEvento = new Date("December 5, 2026 18:00:00").getTime();
     
@@ -1287,6 +1301,30 @@
     // Controles Modal Bancario
     function openBank() { document.getElementById('bankOverlay').classList.add('active'); }
     function closeBank() { document.getElementById('bankOverlay').classList.remove('active'); }
+
+    // Copia la CLABE sin espacios para facilitar la transferencia.
+    async function copyBankClabe() {
+      const clabe = document.getElementById('bankClabe').textContent.trim();
+      const feedback = document.getElementById('bankCopyFeedback');
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(clabe);
+        } else {
+          const input = document.createElement('textarea');
+          input.value = clabe;
+          input.style.position = 'fixed';
+          input.style.opacity = '0';
+          document.body.appendChild(input);
+          input.select();
+          const copied = document.execCommand('copy');
+          input.remove();
+          if (!copied) throw new Error('No se pudo copiar');
+        }
+        feedback.textContent = '✓ CLABE copiada correctamente';
+      } catch (e) {
+        feedback.textContent = 'No se pudo copiar. Mantén presionada la CLABE para seleccionarla.';
+      }
+    }
 
     // Envío de confirmación a Google Sheets / Excel
     async function submitRSVP(e) {
